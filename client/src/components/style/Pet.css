@@ -1,0 +1,11 @@
+.card-pets{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+@media (max-width: 768px) {
+    .card-pets{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+  }
