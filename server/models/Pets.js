@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+
 const PetSchema = mongoose.Schema({
 
     name: {
@@ -67,11 +68,11 @@ const PetSchema = mongoose.Schema({
         trim: true,
     }, 
     adopted: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Types.ObjectId,
         ref: 'User'
     },
     saved: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Types.ObjectId,
         ref: 'User'
     }
 

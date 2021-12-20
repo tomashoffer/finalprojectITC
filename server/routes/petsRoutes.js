@@ -15,6 +15,10 @@ petsControllers.createPet
 router.get('/',
 petsControllers.getAllPets
 )
+// search pet
+router.get('/search', 
+petsControllers.searchPet
+)
 // get pet by id
 router.get('/:id',
 petsControllers.getPetById

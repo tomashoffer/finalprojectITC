@@ -3,6 +3,7 @@ const conectarDB = require('./config/db')
 const cors = require('cors')
 var morgan = require('morgan')
 const fileUpload = require('express-fileupload')
+const multer = require('multer')
 //crear servidor 
 const app = express();
 // Morgan
@@ -24,7 +25,6 @@ const port = process.env.PORT || 4000;
 app.use('/users', require('./routes/usersRoutes'))
 app.use('/auth', require('./routes/authRoutes'))
 app.use('/pets', require('./routes/petsRoutes'))
-app.use('/aws', require('./routes/awsRoutes'))
 
 // DEFINIR PAGINA PRINCIPAL
 app.get('/', (req, res) => {

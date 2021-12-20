@@ -3,14 +3,15 @@ import PetsReducer from './petsReducer';
 import PetsContext from './petsContext';
 import clienteAxios from '../../config/axios';
 
-import {GET_ALL_PETS, GET_ONE_PET, ADD_PET, EDIT_PET, DELETE_PET, ERROR_PETS} from '../../types'
+import {GET_ALL_PETS, GET_ONE_PET, ADD_PET, EDIT_PET, DELETE_PET, SEARCH_PET, ERROR_PETS} from '../../types'
 
 const PetsState = props => {
     const initialState = {
        allpets: '',
        pet: '',
        saved: '',
-       adopt: ''
+       adopt: '',
+       searchState: ''
     }
 
     const [ state, dispatch ] = useReducer(PetsReducer, initialState)
@@ -45,6 +46,21 @@ const PetsState = props => {
             })
         }
     }
+    const searchPet = async datos => {
+        try {
+            const respuesta = await clienteAxios.get('/pets/search/', {params: {datos}})
+            console.log(respuesta)
+            dispatch({
+                type: SEARCH_PET,
+                payload: respuesta.data.pets
+            });
+        } catch (error) {
+            dispatch({
+                type: ERROR_PETS,
+                payload: error
+            })
+        }
+    }
 
     
     useEffect(() => {
@@ -55,8 +71,10 @@ const PetsState = props => {
         <PetsContext.Provider
         value={{
             allpets: state.allpets,
+            searchState: state.searchState,
             getAllPets,
-            addNewPet
+            addNewPet, 
+            searchPet,
         }}
         >
             {props.children}

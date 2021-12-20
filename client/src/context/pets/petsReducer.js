@@ -1,4 +1,4 @@
-import {GET_ALL_PETS, GET_ONE_PET, ADD_PET, EDIT_PET, DELETE_PET} from '../../types'
+import {GET_ALL_PETS, GET_ONE_PET, ADD_PET, EDIT_PET, SEARCH_PET, DELETE_PET} from '../../types'
 
 export default (state, action) => {
     switch (action.type) {
@@ -12,6 +12,12 @@ export default (state, action) => {
         return {
             ...state,
             allpets: action.payload
+        }
+      
+        case  SEARCH_PET:
+        return {
+            ...state,
+            searchState: action.payload
         }
       
    

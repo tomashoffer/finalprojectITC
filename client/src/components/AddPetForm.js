@@ -26,6 +26,7 @@ const AddPetForm = () => {
   });
 
   const [picture, setPicture] = useState()
+  const [preview, setPreview] = useState()
   const { addNewPet } = useContext(PetsContext);
 
 
@@ -37,7 +38,15 @@ const AddPetForm = () => {
   };
   const OnChangeImg = (e) => {
     setPicture(e.target.files[0]);
+    console.log(e.target.files[0])
 
+      const reader = new FileReader();
+      reader.onload = () => {
+        if(reader.readyState === 2) {
+          setPreview(reader.result)
+        }
+      }
+      reader.readAsDataURL(e.target.files[0])
   };
 
   
@@ -62,7 +71,8 @@ const AddPetForm = () => {
     formData.append('hypoallergenic', addpet.hypoallergenic)
     formData.append('dietaryRestrictions', addpet.dietaryRestrictions)
     formData.append('breed', addpet.breed)
-    addNewPet(formData);
+    // addNewPet(formData);
+
 
     swal({
       icon: "success",
@@ -90,6 +100,10 @@ const AddPetForm = () => {
       <CssBaseline />
       <Container fixed>
         <h1>Add Pet for adoption</h1>
+        <div className="container-grid">
+        <div>
+        {preview ? (<div><img style={{ height: "400px", width: "400px" }} src={preview} alt="" /></div>) : (<div><h3>Upload an image to see a preview</h3></div>)}
+        </div>
         <form onSubmit={onSubmit} className="form-add" enctype="multipart/form-data">
           <div className='form-grid'>
           <div>
@@ -119,7 +133,9 @@ const AddPetForm = () => {
         <Button className="btn-submit" type='submit' variant="contained" color="success">
         Add Pet
       </Button>
-        </form>
+        </form> 
+        </div>
+       
        
       </Container>
     </div>

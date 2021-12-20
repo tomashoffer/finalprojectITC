@@ -1,6 +1,8 @@
 const Pets = require('../models/Pets')
 const AWS = require( 'aws-sdk' );
 const config = require('../config/config')
+var _ = require('lodash');
+
 
 const spacesEndpoint = new AWS.Endpoint(config.EndPoint);
 
@@ -74,6 +76,14 @@ exports.getUserPets = async (req, res) => {
         res.status(500).send('Hubo un error')
     }
 }
+exports.searchPet = async (req, res) => { 
+    const {datos} = req.query;
+    const search =  _.omitBy(JSON.parse(datos), (v) => _.isUndefined(v) || _.isNull(v) || v === '');
+    const pets = await Pets.find(search)
+    console.log({pets})
+    res.json({pets})
+}
+
 exports.getSavedPets = async (req, res) => { 
     try {
     let pets = await Pets.find({saved: req.body}) 

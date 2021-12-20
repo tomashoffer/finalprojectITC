@@ -1,3 +1,7 @@
+.container-grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
 .form-add{
     width: 100%;
     max-width: 600px;
@@ -15,7 +19,7 @@
      
 }
 .form-input{
-    width: 400px;
+    width: 200px;
     margin: 4px;
     text-align: center;
 }
@@ -27,7 +31,7 @@ display: flex
     font-size:11px;
 }
 .form-file-input{
-    width: 367px;
+    width: 160px;
 }
 .btn-submit{
     margin: 30px;
