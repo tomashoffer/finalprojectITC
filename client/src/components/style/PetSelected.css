@@ -1,0 +1,43 @@
+.container_selected{
+    margin-top: 20px
+}
+.title{
+    text-align: center;
+}
+.selected{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    margin-top: 60px;
+}
+.img-selected{
+    height: 200px;
+    width: 200px;
+    margin-right: 100px;
+}
+.selected_btn{
+    display: flex;
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+}
+.card-action{
+    display: flex;
+    margin: 0 auto;
+    gap: 5px;
+    margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+    .selected{
+        display: grid;
+        grid-template-rows: 1fr 1fr;
+    }
+    .img-selected{
+        height: 200px;
+        width: 200px;
+        margin-right: 0px;
+    }
+  }

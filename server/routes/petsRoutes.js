@@ -20,16 +20,16 @@ router.get('/search',
 petsControllers.searchPet
 )
 // get pet by id
-router.get('/:id',
+router.post('/getpet',
 petsControllers.getPetById
 )
 // edit pet
-router.put('/:id', 
+router.put('/update', 
 petsControllers.updatePet
 )
 
 // delete pet
-router.delete('/:id', 
+router.delete('/delete', 
 petsControllers.deletePet
 )
 
@@ -39,8 +39,40 @@ petsControllers.getUserPets
 )
 
 // get save pet to user
-router.get('/user/:id/saved',
-petsControllers.getSavedPets
+router.post('/user/saved',
+petsControllers.postSave
+)
+// Adopt pet
+router.post('/user/adopt',
+petsControllers.postAdopt
+)
+// Adopt pet
+router.post('/user/returnAdopt',
+petsControllers.returnAdoptPet
+)
+// Unsave pet
+router.post('/user/unsave',
+petsControllers.unsavePet
+)
+// Foster pet
+router.post('/user/foster',
+petsControllers.fosterPet
+)
+// Unfoster pet
+router.post('/user/unfoster',
+petsControllers.unfosterPet
+)
+// Get save pets
+router.post('/user/getSaved',
+petsControllers.getUserSavedPets
+)
+// Get Foster pets
+router.post('/user/getFoster',
+petsControllers.getFosterUserPets
+)
+// Get Adopt pets
+router.post('/user/getAdopt',
+petsControllers.getAdoptUserPets
 )
 
 module.exports = router;

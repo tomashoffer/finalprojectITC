@@ -177,7 +177,6 @@ export default function TransitionsModal(props) {
 
   };
 
-  console.log(usuario)
   return (
     <div>
       {usuario ? (
@@ -209,7 +208,10 @@ export default function TransitionsModal(props) {
                 <Tabs
                   value={value}
                   onChange={handleChange}
-                  aria-label="basic tabs example"
+                  textColor="primary"
+                  variant="fullWidth"
+                  aria-label="full width tabs example"
+                  TabIndicatorProps={{style: {background:'#F5B000'}}}
                 >
                   <Tab label="Log In" {...a11yProps(0)} />
                   <Tab label="Sign Up" {...a11yProps(1)} />
@@ -249,7 +251,7 @@ export default function TransitionsModal(props) {
                       onChange={OnChangeLogIn}
                       name="passwordLogIn"
                     />
-                    <Button type="submit" variant="contained">
+                    <Button type="submit" style={{background:'#F5B000'}} variant="contained">
                       Log In
                     </Button>
                   </Box>
@@ -273,7 +275,7 @@ export default function TransitionsModal(props) {
                     {/* SIGN UP FORM */}
                     <TextField
                       id="standard-basic"
-                      label="Name"
+                      label="Name & Last Name"
                       variant="standard"
                       value={signUp.name}
                       onChange={OnChangeSignUp}
@@ -313,7 +315,7 @@ export default function TransitionsModal(props) {
                       onChange={OnChangeSignUp}
                       name="confirm"
                     />
-                    <Button type="submit" variant="contained">
+                    <Button type="submit" style={{background:'#F5B000'}} variant="contained">
                       Sign Up
                     </Button>
                   </Box>

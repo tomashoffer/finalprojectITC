@@ -74,6 +74,10 @@ const PetSchema = mongoose.Schema({
     saved: {
         type: mongoose.Types.ObjectId,
         ref: 'User'
+    },
+    foster: {
+        type: mongoose.Types.ObjectId,
+        ref: 'User'
     }
 
 });

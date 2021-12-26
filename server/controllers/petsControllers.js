@@ -58,9 +58,46 @@ exports.getAllPets = async (req, res) => {
         res.status(500).send('Hubo un error')
     }
 }
+exports.getUserSavedPets = async (req, res) => { 
+    try {
+      const pets = await Pets.find({ saved: req.body.id })
+      if(!pets) {
+        return res.status(401).json({msg: 'No saved pets'});
+    }
+      res.json({pets})
+    }catch(err){
+        console.log(err)
+        res.status(500).send('Hubo un error')
+    }
+}
+exports.getAdoptUserPets = async (req, res) => { 
+    try {
+      const pets = await Pets.find({ adopted: req.body.id })
+      if(!pets) {
+        return res.status(401).json({msg: 'No adopted pets'});
+    }
+      res.json({pets})
+    }catch(err){
+        console.log(err)
+        res.status(500).send('Hubo un error')
+    }
+}
+exports.getFosterUserPets = async (req, res) => { 
+    try {
+      const pets = await Pets.find({ foster: req.body.id })
+      if(!pets) {
+        return res.status(401).json({msg: 'No foster pets'});
+    }
+      res.json({pets})
+    }catch(err){
+        console.log(err)
+        res.status(500).send('Hubo un error')
+    }
+}
 exports.getPetById = async (req, res) => { 
     try {
-    let pets = await Pets.findById(req.params.id);
+        console.log(req.body.id)
+    let pets = await Pets.findById(req.body.id);
       res.json({pets})
     }catch(err){
         console.log(err)
@@ -80,14 +117,108 @@ exports.searchPet = async (req, res) => {
     const {datos} = req.query;
     const search =  _.omitBy(JSON.parse(datos), (v) => _.isUndefined(v) || _.isNull(v) || v === '');
     const pets = await Pets.find(search)
+    if(pets.length === 0) {
+        return res.status(401).json({msg: 'No pets founded'});
+    }
     console.log({pets})
     res.json({pets})
 }
 
-exports.getSavedPets = async (req, res) => { 
+exports.postSave = async (req, res) => { 
     try {
-    let pets = await Pets.find({saved: req.body}) 
-      res.json({pets})
+        const usuario = req.body.usuario
+        const petId = req.body.petId
+        let findPet =  await Pets.findById(petId);
+        if(findPet.saved && findPet.saved.toString().includes(usuario)) {
+            return res.status(401).json({msg: 'Pet already saved'});
+        }
+     let savePet =  await Pets.updateOne(
+        { _id: petId },
+        { $push: { saved: usuario } }
+     )
+     res.json({savePet})
+    }catch(err){
+        console.log(err)
+        res.status(500).send('Hubo un error')
+    }
+}
+exports.postAdopt = async (req, res) => { 
+    try {
+    const usuario = req.body.usuario
+    const petId = req.body.petId
+    let pet = await Pets.findById(petId);
+    const newPet = {}
+    newPet.adopted = usuario
+    newPet.adoptionStatus = true
+
+    let petUpdate = await Pets.findOneAndUpdate({_id: petId }, newPet, {new: true}); 
+    let petNoFoster = await Pets.findOneAndUpdate({_id: petId }, {$unset: {foster: ''}} , {new: true});
+    res.json({petNoFoster})
+    }catch(err){
+        console.log(err)
+        res.status(500).send('Hubo un error')
+    }
+}
+
+exports.returnAdoptPet = async (req, res) => { 
+    try {
+        const usuario = req.body.usuario
+        const petId = req.body.petId
+        let findPet =  await Pets.findById(petId);
+        if(findPet.adopted && !findPet.adopted.toString().includes(usuario)) {
+            return res.status(401).json({msg: 'Pet is not save'});
+        }
+    const newPet = {}
+    newPet.adoptionStatus = false
+    let petUpdate = await Pets.findOneAndUpdate({_id: petId }, newPet, {new: true});
+    let returnAdopt = await Pets.updateOne({ _id: petId }, { $unset: {adopted: ''}})
+
+     res.json({petUpdate})
+    }catch(err){
+        console.log(err)
+        res.status(500).send('Hubo un error')
+    }
+}
+exports.unsavePet = async (req, res) => { 
+    try {
+        const usuario = req.body.usuario
+        const petId = req.body.petId
+        let findPet =  await Pets.findById(petId);
+        if(findPet.saved && !findPet.saved.toString().includes(usuario)) {
+            return res.status(401).json({msg: 'Pet is not save'});
+        }
+    let unSave = await Pets.updateOne({ _id: petId }, { $pull: { saved: usuario } })
+     res.json({unSave})
+    }catch(err){
+        console.log(err)
+        res.status(500).send('Hubo un error')
+    }
+}
+
+exports.fosterPet = async (req, res) => { 
+    try {
+    const usuario = req.body.usuario
+    const petId = req.body.petId
+    let pet = await Pets.findById(petId);
+    const newPet = {}
+    newPet.foster = usuario
+    let petAdopt = await Pets.findOneAndUpdate({_id: petId }, newPet, {new: true}); 
+    res.json({petAdopt})
+    }catch(err){
+        console.log(err)
+        res.status(500).send('Hubo un error')
+    }
+}
+exports.unfosterPet = async (req, res) => { 
+    try {
+        const usuario = req.body.usuario
+        const petId = req.body.petId
+        let findPet =  await Pets.findById(petId);
+        if(findPet.foster && !findPet.foster.toString().includes(usuario)) {
+            return res.status(401).json({msg: 'Pet is fostered'});
+        }
+    let unFoster = await Pets.updateOne({ _id: petId }, { $unset: { foster: usuario } })
+     res.json({unFoster})
     }catch(err){
         console.log(err)
         res.status(500).send('Hubo un error')

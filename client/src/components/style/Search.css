@@ -1,0 +1,21 @@
+.form-grid{
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.search-input{
+    width: 90%;
+    height: 30px;
+    margin: 0.5rem;
+}
+
+.btn-submit{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

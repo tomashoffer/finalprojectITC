@@ -1,23 +1,21 @@
-import * as React from "react";
+import React, {useState, useContext, useEffect} from "react";
+import AuthContext from '../../context/auth/authContext'
 import Box from "@mui/material/Box";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import Button from "@mui/material/Button";
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
 import ListItem from "@mui/material/ListItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import MenuIcon from '@mui/icons-material/Menu';
 import IconButton from "@mui/material/IconButton";
 import { faEllipsisV } from "@fortawesome/free-solid-svg-icons/faEllipsisV";
-import SvgIcon from "@mui/material/SvgIcon";
+
 
 const FontAwesomeSvgIcon = React.forwardRef((props, ref) => {
   const { icon } = props;
 
   const {
-    icon: [width, height, , , svgPathData],
+    icon: [width, height, svgPathData]
   } = icon;
 
   return (
@@ -26,12 +24,21 @@ const FontAwesomeSvgIcon = React.forwardRef((props, ref) => {
 });
 
 export default function SwipeableTemporaryDrawer() {
-  const [state, setState] = React.useState({
+  const [state, setState] = useState({
     top: false,
     left: false,
     bottom: false,
     right: false,
   });
+  const [user, setUser] = useState([])
+  const { usuario } = useContext(AuthContext)
+
+    useEffect(() => {
+      if(usuario){
+        setUser(usuario)
+      }
+    })
+
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (
@@ -44,6 +51,8 @@ export default function SwipeableTemporaryDrawer() {
 
     setState({ ...state, [anchor]: open });
   };
+
+
 
   const list = (anchor) => (
     <Box
@@ -63,10 +72,13 @@ export default function SwipeableTemporaryDrawer() {
         <a href='/'><p>Home</p></a>
         </ListItem>
         <ListItem button>
-        <a href='/user/:id'><p>My Oun Pets</p></a>
+        <a href={`/user/${user._id}`}><p>My Profile</p></a>
         </ListItem>
         <ListItem button>
         <a href='/search'><p>Search</p></a>
+        </ListItem>
+        <ListItem button>
+        <a href='/add'><p>Add Pet</p></a>
         </ListItem>
       </List>
     </Box>

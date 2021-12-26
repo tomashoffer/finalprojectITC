@@ -1,11 +1,8 @@
 import React, {useState} from 'react'
 import ModalContext from './modalContext'
-// import clienteAxios from '../../config/axios'
-
     
 const ModalState = props => {
 const [open, setOpen] = useState(false)
-
 const handleOpen = () => setOpen(true);
 const handleClose = () => setOpen(false);
 
@@ -13,10 +10,6 @@ const handleClose = () => setOpen(false);
         <ModalContext.Provider
             value={{
                 open,
-                // logIn,
-                // signUp,
-                // setLogIn,
-                // setSignUp,
                 handleOpen,
                 handleClose,
             }}
