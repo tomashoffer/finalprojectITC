@@ -1,6 +1,4 @@
 import React, { useState, useContext, useEffect } from "react";
-// import { useNavigate } from 'react-router-dom';
-import { Navigate } from "react-router";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -51,7 +49,7 @@ function a11yProps(index) {
   };
 }
 
-const Profile = () => {
+const MyOunPets = () => {
   const { usuario } = useContext(AuthContext);
   const {
     getAllPets,
@@ -76,10 +74,10 @@ const Profile = () => {
 
   useEffect(() => {
     getAllPets();
-    if (allpets) {
-      getAdoptedPets();
-      getFosterPets();
-      getSavedPets();
+    if (allpets && usuario) {
+      getAdoptedPets(usuario._id);
+      getFosterPets(usuario._id);
+      getSavedPets(usuario._id);
     } else {
       setSpinner(true);
       setTimeout(() => {
@@ -111,13 +109,12 @@ const Profile = () => {
   };
   const selectPet = (datos) => {
     getOnePet(datos);
-    // navegate(`pet/${datos._id}`, true)
-    return <Navigate to={`pet/${datos._id}`} />;
   };
 
   return (
     <div>
-      {spinner ? (
+      {usuario && usuario.role === 'user' ? 
+      (<>{spinner ? (
         <div>
           <Spinner />
         </div>
@@ -166,7 +163,7 @@ const Profile = () => {
                               style={{ cursor: "pointer" }}
                             />
                           </a>
-                          <CardContent>
+                          <CardContent className="card_content">
                             <Typography
                               gutterBottom
                               variant="h5"
@@ -200,14 +197,21 @@ const Profile = () => {
                               color="text.primary"
                               style={{ textAlign: "center" }}
                             >
+                              <p>Status: </p>
                               {item.adoptionStatus ? (
                                 <h3 variant="outlined">Adopted ❤️</h3>
                               ) : (
-                                <h3 variant="outlined">Need a house 🙏</h3>
+                                <>
+                                  {item.foster ? (
+                                    <h3 variant="outlined">Pet Fostered</h3>
+                                  ) : (
+                                    <h3 variant="outlined">Need a house 🙏</h3>
+                                  )}
+                                </>
                               )}
                             </Typography>
                           </CardContent>
-                          <CardActions>
+                          <CardActions className="card-btn">
                             {usuario ? (
                               <div className="card-action">
                                 {!item.adoptionStatus ? (
@@ -291,7 +295,7 @@ const Profile = () => {
                     </div>
                   ) : (
                     <div>
-                      <h3>No adopted pets</h3>
+                      <h3>You currently do not own any pets.</h3>
                     </div>
                   )}
                 </TabPanel>
@@ -319,7 +323,7 @@ const Profile = () => {
                               style={{ cursor: "pointer" }}
                             />
                           </a>
-                          <CardContent>
+                          <CardContent className="card_content">
                             <Typography
                               gutterBottom
                               variant="h5"
@@ -348,8 +352,26 @@ const Profile = () => {
                             >
                               <p>Breed: {item.breed}</p>
                             </Typography>
+                            <Typography
+                              variant="body2"
+                              color="text.primary"
+                              style={{ textAlign: "center" }}
+                            >
+                              <p>Status: </p>
+                              {item.adoptionStatus ? (
+                                <h3 variant="outlined">Adopted ❤️</h3>
+                              ) : (
+                                <>
+                                  {item.foster ? (
+                                    <h3 variant="outlined">Pet Fostered</h3>
+                                  ) : (
+                                    <h3 variant="outlined">Need a house 🙏</h3>
+                                  )}
+                                </>
+                              )}
+                            </Typography>
                           </CardContent>
-                          <CardActions>
+                          <CardActions className="card-btn">
                             {usuario ? (
                               <div className="card-action">
                                 {!item.adoptionStatus ? (
@@ -433,7 +455,7 @@ const Profile = () => {
                     </div>
                   ) : (
                     <div>
-                      <h3>No saved pets</h3>
+                      <h3>You currently do not saved any pets.</h3>
                     </div>
                   )}
                 </TabPanel>
@@ -461,7 +483,7 @@ const Profile = () => {
                               style={{ cursor: "pointer" }}
                             />
                           </a>
-                          <CardContent>
+                          <CardContent className="card_content">
                             <Typography
                               gutterBottom
                               variant="h5"
@@ -490,8 +512,26 @@ const Profile = () => {
                             >
                               <p>Breed: {item.breed}</p>
                             </Typography>
+                            <Typography
+                              variant="body2"
+                              color="text.primary"
+                              style={{ textAlign: "center" }}
+                            >
+                              <p>Status: </p>
+                              {item.adoptionStatus ? (
+                                <h3 variant="outlined">Adopted ❤️</h3>
+                              ) : (
+                                <>
+                                  {item.foster ? (
+                                    <h3 variant="outlined">Pet Fostered</h3>
+                                  ) : (
+                                    <h3 variant="outlined">Need a house 🙏</h3>
+                                  )}
+                                </>
+                              )}
+                            </Typography>
                           </CardContent>
-                          <CardActions>
+                          <CardActions className="card-btn">
                             {usuario ? (
                               <div className="card-action">
                                 {!item.adoptionStatus ? (
@@ -575,7 +615,7 @@ const Profile = () => {
                     </div>
                   ) : (
                     <div>
-                      <h3>No fostered pets</h3>
+                      <h3>You currently do not foster any pets.</h3>
                     </div>
                   )}
                 </TabPanel>
@@ -583,9 +623,9 @@ const Profile = () => {
             </div>
           </Container>
         </div>
-      )}
+      )}</>) : null}
     </div>
   );
 };
 
-export default Profile;
+export default MyOunPets;

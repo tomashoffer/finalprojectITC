@@ -12,5 +12,14 @@ router.post('/',[
 ],   
     usersControllers.createUser
 )
+router.get('/allusers', 
+    usersControllers.getAllUsers
+)
+router.put('/update', 
+    usersControllers.updateUser
+)
+router.post('/delete', 
+    usersControllers.deleteUser
+)
 
 module.exports = router;

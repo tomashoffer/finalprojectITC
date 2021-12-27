@@ -2,7 +2,10 @@ import {REGISTRO_EXITOSO,
     REGISTRO_ERROR, 
     OBTENER_USUARIO, 
     LOGIN_EXITOSO, 
-    LOGIN_ERROR, 
+    LOGIN_ERROR,
+    UPDATE_USER,
+    GET_ALL_USERS,
+    DELETE_USER, 
     CERRAR_SESION}from '../../types'
 
 export default (state, action) => {
@@ -37,7 +40,13 @@ export default (state, action) => {
             cargando: false
         }
       
-   
+        case GET_ALL_USERS:
+        case UPDATE_USER:
+        case DELETE_USER:
+        return {
+            ...state,
+            allusers: action.payload
+        }
         default:
             return state;
     }

@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import Modal from "../../Modal";
+import ModalAuth from "../../modals/ModalAuth";
 import BurgerMenu from "../BurgerMenu"
 import AuthContext from '../../../context/auth/authContext'
 import logo from "../../../img/logo.svg"
@@ -23,7 +23,7 @@ const Header = () => {
         {usuario ? (<h2 className="nombre-usuario">WELCOME {usuario.name.toUpperCase()}!</h2>) : null} 
       </div>
       <div className="header-modal">
-        <Modal/> 
+        <ModalAuth/> 
       </div>
     </header>
   );

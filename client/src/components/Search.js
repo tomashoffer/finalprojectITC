@@ -129,7 +129,6 @@ const Search = () => {
                   <InputLabel id="demo-simple-select-standard-label">
                     Adoption Status:
                   </InputLabel>
-                  <InputLabel id="demo-simple-select-label">Age</InputLabel>
                   <Select
                     labelId="test-select-label"
                     id="demo-simple-select-standard"
@@ -259,7 +258,7 @@ const Search = () => {
                           style={{ cursor: "pointer" }}
                         />
                       </a>
-                      <CardContent>
+                      <CardContent className="card_content">
                         <Typography gutterBottom variant="h5" component="div">
                           <h3>Name: {item.name}</h3>
                         </Typography>
@@ -289,14 +288,21 @@ const Search = () => {
                           color="text.primary"
                           style={{ textAlign: "center" }}
                         >
+                          <p>Status: </p>
                           {item.adoptionStatus ? (
                             <h3 variant="outlined">Adopted ❤️</h3>
                           ) : (
-                            <h3 variant="outlined">Need a house 🙏</h3>
+                            <>
+                              {item.foster ? (
+                                <h3 variant="outlined">Pet Fostered</h3>
+                              ) : (
+                                <h3 variant="outlined">Need a house 🙏</h3>
+                              )}
+                            </>
                           )}
                         </Typography>
                       </CardContent>
-                      <CardActions>
+                      <CardActions className="card-btn">
                         {usuario ? (
                           <div className="card-action">
                             {!item.adoptionStatus ? (

@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useState } from 'react';
 import AuthReducer from './authReducer';
 import AuthContext from './authContext';
 import clienteAxios from '../../config/axios';
@@ -8,8 +8,11 @@ import {REGISTRO_EXITOSO,
     REGISTRO_ERROR, 
     OBTENER_USUARIO, 
     LOGIN_EXITOSO, 
-    LOGIN_ERROR, 
-    CERRAR_SESION}from '../../types'
+    LOGIN_ERROR,
+    GET_ALL_USERS,
+    UPDATE_USER, 
+    DELETE_USER,
+    CERRAR_SESION} from '../../types'
 
 const AuthState = props => {
     const initialState = {
@@ -18,8 +21,12 @@ const AuthState = props => {
         usuario: null,
         mensaje: null,
         cargando: true,
+        allusers: ''
     }
-
+    const [idUserSelected, setIdUserSelected] = useState('');
+    const [openUpdateUser, setOpenUpdateUser] = useState(false);
+    const handleOpenUpdateUser = () => setOpenUpdateUser(true);
+    const handleCloseUpdateUser = () => setOpenUpdateUser(false);
     const [ state, dispatch ] = useReducer(AuthReducer, initialState)
 
     const registrarUsuario = async datos => {
@@ -87,6 +94,54 @@ const AuthState = props => {
             });
         }
     }
+    const getAllUsers = async () => {
+        try {
+            const respuesta = await clienteAxios.get('/users/allusers')
+            dispatch({
+                type: GET_ALL_USERS, 
+                payload: respuesta.data
+            })
+        } catch (error) {
+            dispatch({
+                type: LOGIN_ERROR,
+                payload: error
+            });
+        }
+    }
+    const updateUsers = async datos => {
+        try {
+            const respuesta = await clienteAxios.put('/users/update', 
+                {id: datos.id, 
+                usuario: datos.user,  
+                name: datos.name,
+                phone: datos.phone,
+                email: datos.email,
+                role: datos.role,})
+            dispatch({
+                type: UPDATE_USER, 
+                payload: respuesta.data.user
+            })
+        } catch (error) {
+            dispatch({
+                type: LOGIN_ERROR,
+                payload: error
+            });
+        }
+    }
+    const deleteUser = async datos => {
+        try {
+            const respuesta = await clienteAxios.post('/users/delete', {id: datos.id, usuario: datos.user})
+            dispatch({
+                type: DELETE_USER, 
+                payload: respuesta.data.user
+            })
+        } catch (error) {
+            dispatch({
+                type: LOGIN_ERROR,
+                payload: error
+            });
+        }
+    }
 
     const cerrarSesion = async () => {
         dispatch({
@@ -101,10 +156,19 @@ const AuthState = props => {
             usuario: state.usuario,
             mensaje: state.mensaje,
             cargando: state.cargando,
+            allusers: state.allusers,
             registrarUsuario,
             iniciarSesion,
             usuarioAutenticado,
-            cerrarSesion
+            getAllUsers,
+            cerrarSesion,
+            openUpdateUser,
+            handleOpenUpdateUser,
+            handleCloseUpdateUser,
+            idUserSelected,
+            setIdUserSelected,
+            updateUsers,
+            deleteUser
         }}
         >
             {props.children}

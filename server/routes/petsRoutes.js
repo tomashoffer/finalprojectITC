@@ -29,14 +29,10 @@ petsControllers.updatePet
 )
 
 // delete pet
-router.delete('/delete', 
+router.post('/delete', 
 petsControllers.deletePet
 )
 
-// Get pets adopted pets from an user
-router.get('/user/:id',
-petsControllers.getUserPets
-)
 
 // get save pet to user
 router.post('/user/saved',

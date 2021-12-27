@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import Spinner from "./Layout/Spinner/Spinner";
+import Spinner from "../Layout/Spinner/Spinner";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -9,9 +9,9 @@ import Typography from "@mui/material/Typography";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import TextField from "@mui/material/TextField";
-import ModalContext from "../context/modal/modalContext";
-import AlertContext from "../context/alert/alertContext";
-import AuthContext from "../context/auth/authContext";
+import ModalContext from "../../context/modal/modalContext";
+import AlertContext from "../../context/alert/alertContext";
+import AuthContext from "../../context/auth/authContext";
 import swal from "sweetalert";
 
 const style = {
@@ -53,7 +53,7 @@ function a11yProps(index) {
   };
 }
 
-export default function TransitionsModal(props) {
+export default function ModalAuth(props) {
   const { open, handleOpen, handleClose } = useContext(ModalContext);
   const { alerta, mostrarAlerta } = useContext(AlertContext);
   const { usuario, mensaje, authenticate, registrarUsuario, iniciarSesion, cerrarSesion, usuarioAutenticado } =

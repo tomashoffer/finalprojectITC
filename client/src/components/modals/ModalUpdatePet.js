@@ -1,23 +1,34 @@
 import React, { useState, useContext } from "react";
-import PetsContext from "../context/pets/petsContext";
-import AuthContext from "../context/auth/authContext";
-import CssBaseline from "@mui/material/CssBaseline";
-import Container from "@mui/material/Container";
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Modal from '@mui/material/Modal';
+import PetsContext from "../../context/pets/petsContext";
+import AuthContext from "../../context/auth/authContext";
 import Form from "react-bootstrap/Form";
 import Input from "@mui/material/Input";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
-import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./style/AddPetForm.css";
 import swal from "sweetalert";
 
-const AddPetForm = () => {
-  const [addpet, setAddpet] = useState({
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
+
+export default function ModalUpdatePet() {
+  const [updatePet, setUpdatePet] = useState({
     name: "",
     type: "",
-    adoptionStatus: false,
+    adoptionStatus: null,
     address: "",
     city: "",
     height: "",
@@ -30,41 +41,32 @@ const AddPetForm = () => {
   });
 
   const [picture, setPicture] = useState(null);
-  const [preview, setPreview] = useState();
-  const { addNewPet } = useContext(PetsContext);
-  const { usuario } = useContext(AuthContext);
+  const { updatePets, openUpdatePet, handleOpenUpdatePet, handleCloseUpdatePet, idSelected } = useContext(PetsContext)
+  const { usuario } = useContext(AuthContext)
 
   const OnChange = (e) => {
-    setAddpet({
-      ...addpet,
+    setUpdatePet({
+      ...updatePet,
       [e.target.name]: e.target.value,
     });
   };
+
   const OnChangeImg = (e) => {
     setPicture(e.target.files[0]);
-    console.log(e.target.files[0]);
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (reader.readyState === 2) {
-        setPreview(reader.result);
-      }
-    };
-    reader.readAsDataURL(e.target.files[0]);
   };
 
   const onSubmit = (e) => {
     e.preventDefault();
     if (
-      addpet.name.trim() === "" ||
-      addpet.type.trim() === "" ||
-      addpet.height.trim() === "" ||
-      addpet.weight.trim() === "" ||
-      addpet.color.trim() === "" ||
-      addpet.bio.trim() === "" ||
-      addpet.hypoallergenic === null ||
-      addpet.dietaryRestrictions.trim() === "" ||
-      addpet.breed.trim() === ""
+      updatePet.name.trim() === "" ||
+      updatePet.type.trim() === "" ||
+      updatePet.height.trim() === "" ||
+      updatePet.weight.trim() === "" ||
+      updatePet.color.trim() === "" ||
+      updatePet.bio.trim() === "" ||
+      updatePet.hypoallergenic === null ||
+      updatePet.dietaryRestrictions.trim() === "" ||
+      updatePet.breed.trim() === ""
     ) {
       swal({
         text: "You must complete all the fields",
@@ -73,56 +75,63 @@ const AddPetForm = () => {
     }
     if (picture === null) {
       swal({
-        text: "You must complete all the fields",
+        text: "You must upload an image",
       });
       return;
     }
+
     const formData = new FormData();
     formData.append("file", picture);
-    formData.append("name", addpet.name);
-    formData.append("type", addpet.type);
-    formData.append("address", addpet.address);
-    formData.append("city", addpet.city);
-    formData.append("height", addpet.height);
-    formData.append("weight", addpet.weight);
-    formData.append("color", addpet.color);
-    formData.append("bio", addpet.bio);
-    formData.append("hypoallergenic", addpet.hypoallergenic);
-    formData.append("dietaryRestrictions", addpet.dietaryRestrictions);
-    formData.append("breed", addpet.breed);
-    formData.append("userId", usuario._id);
-    addNewPet(formData);
-
+    formData.append("name", updatePet.name);
+    formData.append("type", updatePet.type);
+    formData.append("adoptionStatus", updatePet.adoptionStatus);
+    formData.append("address", updatePet.address);
+    formData.append("city", updatePet.city);
+    formData.append("height", updatePet.height);
+    formData.append("weight", updatePet.weight);
+    formData.append("color", updatePet.color);
+    formData.append("bio", updatePet.bio);
+    formData.append("hypoallergenic", updatePet.hypoallergenic);
+    formData.append("dietaryRestrictions", updatePet.dietaryRestrictions);
+    formData.append("breed", updatePet.breed);
+    formData.append("id", idSelected);
+    formData.append("usuario", usuario._id);
+    updatePets(formData)
     swal({
       icon: "success",
-      text: "Pet add successfully",
+      text: "Pet update successfully",
     });
+
+    handleCloseUpdatePet()
+
+    setUpdatePet({
+      name: "",
+      type: "",
+      adoptionStatus: null,
+      address: "",
+      city: "",
+      picture: null,
+      height: "",
+      weight: "",
+      color: "",
+      bio: "",
+      hypoallergenic: null,
+      dietaryRestrictions: "",
+      breed: "",
+    });
+
     setPicture(null);
   };
-
   return (
     <div>
-      <CssBaseline />
-      <Container fixed>
-        <h1>Add Pet for adoption</h1>
-        <div className="container-grid">
-          <div>
-            {preview ? (
-              <div className="container_img">
-                <img
-                  src={preview}
-                  style={{height: "250px",
-                  width: "250px", marginTop: "80px"}}
-                  alt="prev img pet"
-                />
-              </div>
-            ) : (
-              <div>
-                <h3>Upload an image to see a preview</h3>
-              </div>
-            )}
-          </div>
-          <form
+      <Modal
+        open={openUpdatePet}
+        onClose={handleCloseUpdatePet}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+        <form
             onSubmit={onSubmit}
             className="form-add"
             enctype="multipart/form-data"
@@ -135,7 +144,7 @@ const AddPetForm = () => {
                   placeholder="Name"
                   type="text"
                   name="name"
-                  value={addpet.name}
+                  value={updatePet.name}
                 />
                 <InputLabel id="demo-simple-select-standard-label">
                   Type:
@@ -156,6 +165,20 @@ const AddPetForm = () => {
                   <MenuItem value={"rabbit"}>Rabbit</MenuItem>
                   <MenuItem value={"turtle"}>Turtle</MenuItem>
                 </Select>
+                <InputLabel id="demo-simple-select-standard-label">
+                  Status:
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select-standard"
+                  onChange={OnChange}
+                  className="search-input"
+                  name="adoptionStatus"
+                  label="Status"
+                >
+                  <MenuItem value={true}>Adopted ❤️</MenuItem>
+                  <MenuItem value={false}>Need a house 🙏</MenuItem>
+                </Select>
 
                 <Input
                   onChange={OnChange}
@@ -163,7 +186,7 @@ const AddPetForm = () => {
                   placeholder="Address"
                   type="text"
                   name="address"
-                  value={addpet.address}
+                  value={updatePet.address}
                 />
                 <Input
                   onChange={OnChange}
@@ -171,7 +194,7 @@ const AddPetForm = () => {
                   placeholder="City"
                   type="text"
                   name="city"
-                  value={addpet.city}
+                  value={updatePet.city}
                 />
                 <Input
                   onChange={OnChange}
@@ -179,7 +202,7 @@ const AddPetForm = () => {
                   placeholder="Height"
                   type="number"
                   name="height"
-                  value={addpet.height}
+                  value={updatePet.height}
                 />
                 <Input
                   onChange={OnChange}
@@ -187,7 +210,7 @@ const AddPetForm = () => {
                   placeholder="Weight"
                   type="number"
                   name="weight"
-                  value={addpet.weight}
+                  value={updatePet.weight}
                 />
                 <Input
                   onChange={OnChange}
@@ -195,7 +218,7 @@ const AddPetForm = () => {
                   placeholder="Color"
                   type="text"
                   name="color"
-                  value={addpet.color}
+                  value={updatePet.color}
                 />
                 <Input
                   onChange={OnChange}
@@ -203,7 +226,7 @@ const AddPetForm = () => {
                   placeholder="Biography"
                   type="text"
                   name="bio"
-                  value={addpet.bio}
+                  value={updatePet.bio}
                 />
                 <InputLabel id="demo-simple-select-standard-label">
                   Hypoallergenic:
@@ -225,7 +248,7 @@ const AddPetForm = () => {
                   placeholder="Breed"
                   type="text"
                   name="breed"
-                  value={addpet.breed}
+                  value={updatePet.breed}
                 />
                 <Input
                   onChange={OnChange}
@@ -233,7 +256,7 @@ const AddPetForm = () => {
                   placeholder="Dietary Restrictions"
                   type="text"
                   name="dietaryRestrictions"
-                  value={addpet.dietaryRestrictions}
+                  value={updatePet.dietaryRestrictions}
                 />
                 <div className="form-file">
                   <Form.Label className="form-file-label">Image:</Form.Label>
@@ -250,16 +273,13 @@ const AddPetForm = () => {
               className="btn-submit"
               type="submit"
               variant="contained"
-              color="success"
-              style={{marginBottom: "30px"}}
+              style={{background:'#F5B000', marginBottom: "30px"}}
             >
-              Add Pet
+              Update Pet
             </Button>
           </form>
-        </div>
-      </Container>
+        </Box>
+      </Modal>
     </div>
   );
-};
-
-export default AddPetForm;
+}

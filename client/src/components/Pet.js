@@ -82,7 +82,7 @@ const Pet = ({buscando}) => {
       onClick={() => selectPet(item)}
       style={{cursor: 'pointer'}}
     />
-    <CardContent>
+    <CardContent className='card_content'>
       <Typography gutterBottom variant="h5" component="div">
        <h3>Name: {item.name}</h3> 
       </Typography>
@@ -93,13 +93,15 @@ const Pet = ({buscando}) => {
       <p>Bio: {item.bio}</p>
       </Typography>
       <Typography variant="body2" color="text.primary" style={{textAlign: 'center'}}>
-      <p>Breed: {item.breed}</p>
+      <p>Breed: {item.breed}</p> 
       </Typography>
       <Typography variant="body2" color="text.primary" style={{textAlign: 'center'}}>
-        {item.adoptionStatus ? (<h3 variant="outlined">Adopted ❤️</h3>) : (<h3 variant="outlined">Need a house 🙏</h3>)}
+        <p>Status: </p>{item.adoptionStatus ? (<h3 variant="outlined">Adopted ❤️</h3>) 
+        : (<>{item.foster ? (<h3 variant="outlined">Pet Fostered</h3>)
+        : (<h3 variant="outlined">Need a house 🙏</h3>)}</>)}
       </Typography>
     </CardContent>
-    <CardActions>
+    <CardActions className="card-btn">
       {usuario ? 
       (<div className="card-action">
         {!item.adoptionStatus ? 
@@ -132,39 +134,46 @@ const Pet = ({buscando}) => {
         onClick={() => selectPet(item)}
       style={{cursor: 'pointer'}}
       />
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-         <h3>Name: {item.name}</h3> 
-        </Typography>
-        <Typography variant="body2" color="text.primary" style={{textAlign: 'center'}}>
-        <p>Type: {item.type}</p>
-        </Typography>
-        <Typography variant="body2" color="text.primary" style={{textAlign: 'center'}}>
-        <p>Bio: {item.bio}</p>
-        </Typography>
-        <Typography variant="body2" color="text.primary" style={{textAlign: 'center'}}>
-        <p>Breed: {item.breed}</p>
-        </Typography>
-      </CardContent>
-      <CardActions>
-        {usuario ? 
-        (<div className="card-action">
-          {!item.adoptionStatus ? 
-          (<Button variant="outlined" color="warning" onClick={() => onClickAdopt(item._id)}>ADOPT ME 🙏</Button>)
-          :(<h3 variant="outlined">Adopted ❤️</h3>)}
-          {item.adoptionStatus ? null : (<>{item.foster && item.foster.toString().includes(usuario._id) ? 
-          (<Button variant="outlined" color="error" onClick={() => onClickUnfoster(item._id)}>RETURN PET</Button>)
-           : (<Button variant="outlined" color="success" onClick={() => onClickFoster(item._id)}>FOSTER 🙏</Button>)}</>)}
-          {item.saved && item.saved.toString().includes(usuario._id) ? 
-          (<Button variant="outlined" color="error" onClick={() => onClickUnSave(item._id)}>UNSAVE</Button>) : 
-          (<Button variant="outlined" color="success" onClick={() => onClickSave(item._id)}>SAVE {item.name}</Button>)}
-        </div>) : 
-        (<div>
-          <h3>Give {item.name} a 🏠, Log in!</h3>
-        </div>)
-        }
-        
-      </CardActions>
+      <CardContent className='card_content'>
+      <Typography gutterBottom variant="h5" component="div">
+       <h3>Name: {item.name}</h3> 
+      </Typography>
+      <Typography variant="body2" color="text.primary" style={{textAlign: 'center'}}>
+      <p>Type: {item.type}</p>
+      </Typography>
+      <Typography variant="body2" color="text.primary" style={{textAlign: 'center'}}>
+      <p>Bio: {item.bio}</p>
+      </Typography>
+      <Typography variant="body2" color="text.primary" style={{textAlign: 'center'}}>
+      <p>Breed: {item.breed}</p> 
+      </Typography>
+      <Typography variant="body2" color="text.primary" style={{textAlign: 'center'}}>
+        <p>Status: </p>{item.adoptionStatus ? (<h3 variant="outlined">Adopted ❤️</h3>) 
+        : (<>{item.foster ? (<h3 variant="outlined">Pet Fostered</h3>)
+        : (<h3 variant="outlined">Need a house 🙏</h3>)}</>)}
+      </Typography>
+    </CardContent>
+    <CardActions className="card-btn">
+      {usuario ? 
+      (<div className="card-action">
+        {!item.adoptionStatus ? 
+        (<Button variant="outlined" color="warning" onClick={() => onClickAdopt(item._id)}>ADOPT ME</Button>)
+        :(<>{item.adopted.toString().includes(usuario._id) ? (<Button variant="outlined" color="error" onClick={() => returnApodted(item._id)}>RETURN ADOPTED PET</Button>) : null }</>)}
+
+        {item.adoptionStatus ? null : (<>{item.foster && item.foster.toString().includes(usuario._id) ? 
+        (<Button variant="outlined" color="error" onClick={() => onClickUnfoster(item._id)}>RETURN FOSTER PET</Button>)
+         : (<Button variant="outlined" color="success" onClick={() => onClickFoster(item._id)}>FOSTER</Button>)}</>)}
+
+        {item.saved && item.saved.toString().includes(usuario._id) ? 
+        (<Button variant="outlined" color="error" onClick={() => onClickUnSave(item._id)}>UNSAVE</Button>) : 
+        (<Button variant="outlined" color="success" onClick={() => onClickSave(item._id)}>SAVE {item.name}</Button>)}
+      </div>) : 
+      (<div>
+        <h3>Give {item.name} a 🏠, Log in!</h3>
+      </div>)
+      }
+      
+    </CardActions>
     </Card>
   ))}</>)}
 

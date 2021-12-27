@@ -1,4 +1,5 @@
 const Pets = require('../models/Pets')
+const User = require('../models/User')
 const AWS = require( 'aws-sdk' );
 const config = require('../config/config')
 var _ = require('lodash');
@@ -13,6 +14,10 @@ const s3 = new AWS.S3({
 
 exports.createPet = async (req, res) => {
     const file = req.files.file;
+    const user = await User.findById(req.body.userId)
+    if(user.role === 'user'){
+        return res.status(401).json({msg: 'Only admin can add pets'});
+    }
 
     try {
         const uploadObject = await s3.putObject({
@@ -96,7 +101,6 @@ exports.getFosterUserPets = async (req, res) => {
 }
 exports.getPetById = async (req, res) => { 
     try {
-        console.log(req.body.id)
     let pets = await Pets.findById(req.body.id);
       res.json({pets})
     }catch(err){
@@ -104,15 +108,7 @@ exports.getPetById = async (req, res) => {
         res.status(500).send('Hubo un error')
     }
 }
-exports.getUserPets = async (req, res) => { 
-    try {
-    let pets = await Pets.find({adopted: req.body}) 
-      res.json({pets})
-    }catch(err){
-        console.log(err)
-        res.status(500).send('Hubo un error')
-    }
-}
+
 exports.searchPet = async (req, res) => { 
     const {datos} = req.query;
     const search =  _.omitBy(JSON.parse(datos), (v) => _.isUndefined(v) || _.isNull(v) || v === '');
@@ -120,13 +116,16 @@ exports.searchPet = async (req, res) => {
     if(pets.length === 0) {
         return res.status(401).json({msg: 'No pets founded'});
     }
-    console.log({pets})
     res.json({pets})
 }
 
 exports.postSave = async (req, res) => { 
     try {
         const usuario = req.body.usuario
+        const user = await User.findById(usuario)
+        if(user.role === 'admin'){
+            return res.status(401).json({msg: 'Only user save pets'});
+        }
         const petId = req.body.petId
         let findPet =  await Pets.findById(petId);
         if(findPet.saved && findPet.saved.toString().includes(usuario)) {
@@ -145,6 +144,10 @@ exports.postSave = async (req, res) => {
 exports.postAdopt = async (req, res) => { 
     try {
     const usuario = req.body.usuario
+    const user = await User.findById(usuario)
+        if(user.role === 'admin'){
+            return res.status(401).json({msg: 'Only user adopt pets'});
+        }
     const petId = req.body.petId
     let pet = await Pets.findById(petId);
     const newPet = {}
@@ -163,6 +166,10 @@ exports.postAdopt = async (req, res) => {
 exports.returnAdoptPet = async (req, res) => { 
     try {
         const usuario = req.body.usuario
+        const user = await User.findById(usuario)
+        if(user.role === 'admin'){
+            return res.status(401).json({msg: 'Only user return pets'});
+        }
         const petId = req.body.petId
         let findPet =  await Pets.findById(petId);
         if(findPet.adopted && !findPet.adopted.toString().includes(usuario)) {
@@ -182,6 +189,10 @@ exports.returnAdoptPet = async (req, res) => {
 exports.unsavePet = async (req, res) => { 
     try {
         const usuario = req.body.usuario
+        const user = await User.findById(usuario)
+        if(user.role === 'admin'){
+            return res.status(401).json({msg: 'Only user unsave pets'});
+        }
         const petId = req.body.petId
         let findPet =  await Pets.findById(petId);
         if(findPet.saved && !findPet.saved.toString().includes(usuario)) {
@@ -198,6 +209,10 @@ exports.unsavePet = async (req, res) => {
 exports.fosterPet = async (req, res) => { 
     try {
     const usuario = req.body.usuario
+    const user = await User.findById(usuario)
+        if(user.role === 'admin'){
+            return res.status(401).json({msg: 'Only user foster pets'});
+        }
     const petId = req.body.petId
     let pet = await Pets.findById(petId);
     const newPet = {}
@@ -212,6 +227,10 @@ exports.fosterPet = async (req, res) => {
 exports.unfosterPet = async (req, res) => { 
     try {
         const usuario = req.body.usuario
+        const user = await User.findById(usuario)
+        if(user.role === 'admin'){
+            return res.status(401).json({msg: 'Only user unfoster pets'});
+        }
         const petId = req.body.petId
         let findPet =  await Pets.findById(petId);
         if(findPet.foster && !findPet.foster.toString().includes(usuario)) {
@@ -227,12 +246,17 @@ exports.unfosterPet = async (req, res) => {
 
 exports.updatePet = async(req, res) =>{
     const file = req.files.file;
+    const usuario = req.body.usuario
+    const user = await User.findById(usuario)
+    if(user.role === 'user'){
+        return res.status(401).json({msg: 'Only admin update pets'});
+    }
 try{
-    let pets = await Pets.findById(req.param.id);
+    let pets = await Pets.findById(req.body.id);
     if(!pets){
         return res.status(404).json({msg: 'Pet not found'})
     }
-    const uploadObject = await s3.putObject({
+     await s3.putObject({
         ACL: 'public-read', 
         Bucket: config.BucketName,
         Body: file.data,
@@ -240,12 +264,11 @@ try{
      }).promise()
 
     const urlImage = `https://${config.BucketName}.${config.EndPoint}/${file.name}` 
-      console.log(uploadObject)
-     console.log(urlImage)
-     const newPet = new Pets({
+ 
+     const newPet = {
         name: req.body.name,
         type: req.body.type,
-        adoptionStatus: false,
+        adoptionStatus: req.body.adoptionStatus,
         address: req.body.address,
         city: req.body.city,
         picture: urlImage,
@@ -255,11 +278,11 @@ try{
         bio: req.body.bio,
         hypoallergenic: req.body.hypoallergenic,
         dietaryRestrictions: req.body.dietaryRestrictions,
-        breed: req.body.breed,
-      });
+        breed: req.body.breed
+      }
 
-        pets = await Pets.findOneAndUpdate({_id: req.params.id}, {$set: newPet}, { new: true });
-        res.json({pets});
+        pets = await Pets.findByIdAndUpdate({_id: req.body.id}, {$set: newPet}, { new: true });
+        res.json(pets);
     }catch(err){
         console.error(err)
         res.status(500).send('Error in the server')
@@ -268,21 +291,20 @@ try{
 
 //  Delete pet
 exports.deletePet = async (req, res ) => {
+    const usuario = req.body.usuario
+    const user = await User.findById(usuario)
+    if(user.role === 'user'){
+        return res.status(401).json({msg: 'Only admin delete pets'});
+    }
     try {
-        let pets = await Pets.findById(req.param.id);  
-
+        let pets = await Pets.findById(req.body.petId);  
+        console.log(pets)
         if(!pets) {
             return res.status(404).json({msg: 'Pet not found'});
         }
-        await Pets.findOneAndRemove({ _id : req.params.id });
-        res.json({ msg: 'Pet deleted '})
+        pets = await Pets.findOneAndRemove({ _id : req.body.petId });
 
-        await s3.deleteObject({
-            Bucket: config.BucketName,
-            Key: file.name
-        }).promise()
-
-        res.json('pet deleted')
+        res.json(pets)
     } catch (error) {
         console.log(error);
         res.status(500).send('Error in the server')

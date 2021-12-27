@@ -64,8 +64,8 @@ const PetSelected = () => {
                    
                     <h3>Type: {mascota.type}</h3>
                     <h3>Status: {mascota.adoptionStatus ? 'Adopted ❤️' : "Need a house 🙏"}</h3>
-                    <h3>Height: {mascota.height}</h3>
-                    <h3>Weight: {mascota.weight}</h3>
+                    <h3>Height: {mascota.height}cm</h3>
+                    <h3>Weight: {mascota.weight}cm</h3>
                     <h3>Color: {mascota.color}</h3>
                     <h3>Hypoallergenic: {mascota.hypoallergenic ? 'Yes' : 'No'}</h3>
                     <h3>Dietary Restrictions: {mascota.dietaryRestrictions}</h3>

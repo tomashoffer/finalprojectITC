@@ -1,6 +1,7 @@
 .container-grid{
     display: grid;
     grid-template-columns: 1fr 1fr;
+    margin: 0 auto;
 }
 .form-add{
     width: 100%;
@@ -37,12 +38,18 @@ display: flex
     margin: 30px;
     width: 200px
 }
-
+.container_img{
+    display: flex;
+    justify-content: center;
+}
 @media (max-width: 768px) {
-    .form-grid{
+    .container-grid{
         display: grid;
         grid-template-columns: 1fr;
         gap: 5px
-         
+    }
+    .add_img{
+        height: "50px";
+        width: "50px"
     }
   }
