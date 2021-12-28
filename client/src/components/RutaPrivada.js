@@ -1,11 +1,11 @@
 import React, {useContext, useEffect} from 'react';
-import { Route, Navigate } from 'react-router-dom'
+import { Outlet, Navigate } from "react-router";
 import AuthContext from '../context/auth/authContext'
 
-const RutaPrivada = ({ Component, ...props }) => {
+const RutaPrivada = () => {
       // Extraer info de authentication
   const authContext = useContext(AuthContext);
-  const { authenticate, cargando, usuarioAutenticado } = authContext;
+  const { usuarioAutenticado, cargando, authenticate } = authContext;
 
   useEffect(() => {
     // mantenemos la data del usuario al hacer refresh
@@ -13,13 +13,7 @@ const RutaPrivada = ({ Component, ...props }) => {
     // eslint-disable-next-line
   }, [usuarioAutenticado]);
 
-    return ( 
-        <Route { ...props } render={ props => !authenticate && !cargando
-            ? (<Navigate to='/' />) 
-            : (<Component {...props} />)}
-        
-        />
-     );
+  return !authenticate && !cargando ? <Navigate to="/404"/> : <Outlet />;
 }
  
 export default RutaPrivada;

@@ -51,14 +51,16 @@ function a11yProps(index) {
 }
 
 const MyOunPets = () => {
-  const { usuario, getAllUsers, allusers, handleOpenUpdateUser, setIdUserSelected, deleteUser } = useContext(AuthContext);
-  const { getAllPets, allpets, handleOpenUpdatePet, handleOpenSeePets, setIdSelected, deletePet } = useContext(PetsContext);
+  const { usuario, getAllUsers, allusers, handleOpenUpdateUser, setIdUserSelected, deleteUser, idUserSelected } = useContext(AuthContext);
+  const { getAllPets, allpets, handleOpenUpdatePet, handleOpenSeePets, setIdSelected, deletePet, getAdoptedPets, getFosterPets, getSavedPets, 
+    saved, adopt, foster } = useContext(PetsContext);
   const [spinner, setSpinner] = useState(false);
   const [users, setUsers] = useState([]);
   const [mascotas, setMascotas] = useState([]);
   const [value, setValue] = useState(0);
 
   useEffect(() => {
+    setSpinner(true)
     if(!allpets){
       getAllPets();
       setMascotas(allpets)
@@ -75,7 +77,7 @@ const MyOunPets = () => {
       getAllPets();
       setMascotas(allpets)
     }
-    
+    setSpinner(false)
   }, [allpets, allusers]);
 
   const handleChange = (event, newValue) => {
@@ -241,7 +243,7 @@ const MyOunPets = () => {
             </div>
           </Container>
         </div>
-      )}</>) : (<h1 style={{ marginTop: '30px'}}>Error 404. Page only for ADMIN</h1>)}
+      )}</>) : null}
     </div>
   );
 };

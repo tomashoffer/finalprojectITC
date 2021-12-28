@@ -16,6 +16,7 @@ import AuthContext from '../context/auth/authContext'
 
 const Pet = ({buscando}) => {
     const { usuario } = useContext(AuthContext);
+
     const { getAllPets, allpets, savePet, adoptPet, unsavePet, fosterPet, unfosterPet, searchState, getOnePet, returnAdoptPet } = useContext(PetsContext);
     const [mascotas, setMascotas] = useState([])
     const [spinner, setSpinner] = useState(false) 
@@ -23,16 +24,12 @@ const Pet = ({buscando}) => {
 
 
     useEffect(() => {
+        setSpinner(true)
         getAllPets()
         if(allpets){
         setMascotas(allpets)
         }
-        else{
-          setSpinner(true)
-          setTimeout(()=>{
-          setSpinner(false)
-          }, 1000)
-        }   
+        setSpinner(false) 
       // eslint-disable-next-line
     }, [allpets])
 

@@ -1,8 +1,10 @@
-import React, { useReducer, useState } from 'react';
+import React, { useReducer, useState, useContext } from 'react';
 import AuthReducer from './authReducer';
 import AuthContext from './authContext';
 import clienteAxios from '../../config/axios';
 import tokenAuth from '../../config/tokenAuth';
+import ModalContext from "../modal/modalContext";
+import swal from "sweetalert";
 
 import {REGISTRO_EXITOSO, 
     REGISTRO_ERROR, 
@@ -21,13 +23,14 @@ const AuthState = props => {
         usuario: null,
         mensaje: null,
         cargando: true,
-        allusers: ''
+        allusers: '',
     }
     const [idUserSelected, setIdUserSelected] = useState('');
     const [openUpdateUser, setOpenUpdateUser] = useState(false);
     const handleOpenUpdateUser = () => setOpenUpdateUser(true);
     const handleCloseUpdateUser = () => setOpenUpdateUser(false);
     const [ state, dispatch ] = useReducer(AuthReducer, initialState)
+    const { handleClose } = useContext(ModalContext);
 
     const registrarUsuario = async datos => {
         try {
@@ -81,6 +84,8 @@ const AuthState = props => {
             })
             // Obtener usuario 
             usuarioAutenticado()
+            handleClose()
+            swal("Hello again!", "Log In successfully!", "success");
         } catch (error) {
             console.log(error)
             //esto viene del backend

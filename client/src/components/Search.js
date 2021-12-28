@@ -47,9 +47,11 @@ const Search = () => {
   const history = useNavigate();
 
   useEffect(() => {
+    setSpinner(true);
     if (searchState) {
       setMascotas(searchState);
     }
+     setSpinner(false);
     // eslint-disable-next-line
   }, [setMascotas, searchState]);
 
@@ -71,7 +73,6 @@ const Search = () => {
     };
     searchPet(newSearch);
     setSubmit(true);
-    console.log(newSearch);
     setSpinner(true);
     setTimeout(() => {
       setSpinner(false);

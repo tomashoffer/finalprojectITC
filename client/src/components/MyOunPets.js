@@ -73,17 +73,14 @@ const MyOunPets = () => {
   // const navegate = useNavigate()
 
   useEffect(() => {
+    setSpinner(true);
     getAllPets();
     if (allpets && usuario) {
       getAdoptedPets(usuario._id);
       getFosterPets(usuario._id);
       getSavedPets(usuario._id);
-    } else {
-      setSpinner(true);
-      setTimeout(() => {
-        setSpinner(false);
-      }, 1000);
-    }
+    } 
+    setSpinner(false);
   }, [allpets]);
 
   const handleChange = (event, newValue) => {
@@ -113,14 +110,11 @@ const MyOunPets = () => {
 
   return (
     <div>
-      {usuario && usuario.role === 'user' ? 
-      (<>{spinner ? (
-        <div>
-          <Spinner />
-        </div>
-      ) : (
+      {usuario && usuario.role === 'user' && !spinner ? 
+       (
         <div>
           <CssBaseline />
+          (
           <Container fixed>
             <h1>See your Pets! </h1>
             <div className="profile-tabs">
@@ -234,7 +228,8 @@ const MyOunPets = () => {
                                       >
                                         RETURN ADOPTED PET
                                       </Button>
-                                    ) : null}
+                                    ) : null
+                                    }
                                   </>
                                 )}
 
@@ -293,11 +288,15 @@ const MyOunPets = () => {
                         </Card>
                       ))}
                     </div>
-                  ) : (
-                    <div>
+                  ) : (<>{spinner ?
+                    (
+                     <div>
+                       <Spinner />
+                     </div>
+                   ) :
+                    (<div>
                       <h3>You currently do not own any pets.</h3>
-                    </div>
-                  )}
+                    </div>)}</>)}
                 </TabPanel>
 
                 <TabPanel value={value} index={1}>
@@ -453,11 +452,17 @@ const MyOunPets = () => {
                         </Card>
                       ))}
                     </div>
-                  ) : (
-                    <div>
+                  ) : (<>{ spinner ?
+                      (
+                       <div>
+                         <Spinner />
+                       </div>
+                     ) :
+                    (<div>
                       <h3>You currently do not saved any pets.</h3>
-                    </div>
-                  )}
+                    </div>)}
+                    </>)
+                  }
                 </TabPanel>
 
                 <TabPanel value={value} index={2}>
@@ -613,17 +618,22 @@ const MyOunPets = () => {
                         </Card>
                       ))}
                     </div>
-                  ) : (
-                    <div>
+                  ) : (<>
+                    {spinner ?
+                     (
+                      <div>
+                        <Spinner />
+                      </div>
+                    ) : (<div>
                       <h3>You currently do not foster any pets.</h3>
-                    </div>
-                  )}
+                    </div>)}
+                    </>)}
                 </TabPanel>
               </Box>
             </div>
           </Container>
         </div>
-      )}</>) : null}
+      ) : null}
     </div>
   );
 };

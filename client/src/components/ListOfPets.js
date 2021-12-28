@@ -34,9 +34,7 @@ const ListOfPets = () => {
     return ( 
         <div>
             <h2 style={{marginTop: "20px"}}>GIVE THEM A HOUSE</h2>
-             <h3 >We are a non-profit association <br></br>
-                 that seeks to build a better world for<br></br>
-                  dogs through sustainable initiatives.</h3>
+             <h3 >We are a non-profit association that seeks to build a better <br></br> world for animals through sustainable initiatives.</h3>
                 <div>
                 <div style={{width: "50%", textAlign: "center", margin: '0 auto'}}>
                 <FormLabel style={{fontSize: "15px", fontWeight: "bold"}}>Search by Types</FormLabel>

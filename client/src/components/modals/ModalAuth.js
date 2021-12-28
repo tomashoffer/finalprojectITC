@@ -54,10 +54,9 @@ function a11yProps(index) {
 }
 
 export default function ModalAuth(props) {
-  const { open, handleOpen, handleClose } = useContext(ModalContext);
+  const { open, handleOpen } = useContext(ModalContext);
   const { alerta, mostrarAlerta } = useContext(AlertContext);
-  const { usuario, mensaje, authenticate, registrarUsuario, iniciarSesion, cerrarSesion, usuarioAutenticado } =
-    useContext(AuthContext);
+  const { usuario, mensaje, authenticate, registrarUsuario, iniciarSesion, cerrarSesion, usuarioAutenticado } = useContext(AuthContext);
 
   useEffect(() => {
     if(localStorage.getItem('token')){
@@ -119,17 +118,19 @@ export default function ModalAuth(props) {
       password: logIn.passwordLogIn,
     };
     iniciarSesion(loginSubmit);
+
     setSpinner(true);
     setTimeout(() => {
       setSpinner(false);
     }, 1000);
-
+  
     setLogIn({
       emailLogIn: "",
       passwordLogIn: "",
     });
-    handleClose();
+  
   };
+
   const onSubmitSignUp = (e) => {
     e.preventDefault();
     if (signUp.name.trim() === "" ||
@@ -191,7 +192,7 @@ export default function ModalAuth(props) {
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         open={open}
-        onClose={handleClose}
+        onClose={!open}
         closeAfterTransition
         BackdropComponent={Backdrop}
         BackdropProps={{

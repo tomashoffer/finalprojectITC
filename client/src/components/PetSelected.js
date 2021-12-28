@@ -1,5 +1,6 @@
 import React, {useContext, useState, useEffect} from 'react'
 import {useParams} from 'react-router-dom';
+import Spinner from "./Layout/Spinner/Spinner";
 import PetsContext from '../context/pets/petsContext'
 import CssBaseline from '@mui/material/CssBaseline';
 import Container from '@mui/material/Container';
@@ -9,15 +10,16 @@ import './style/PetSelected.css'
 
 const PetSelected = () => {
     const { selected, allpets, savePet, adoptPet, unsavePet, fosterPet, unfosterPet, getOnePet, returnAdoptPet } = useContext(PetsContext);
+    const [spinner, setSpinner] = useState(false);
     const { usuario } = useContext(AuthContext);
     const [mascota, setMascota] = useState('')
     const {id} = useParams();
 
     useEffect(() => {   
+      setSpinner(true)
         getOnePet(id)  
-       if(selected){
-           setMascota(selected)
-       }
+        setMascota(selected)
+       setSpinner(false)
     }, [selected, id, allpets])
 
     const onClickSave = id => {
@@ -57,6 +59,12 @@ const PetSelected = () => {
         <div className="container_selected">
             <CssBaseline />
                 <Container fixed>
+                {spinner ? (
+              <div>
+                <Spinner />
+              </div>
+            ) : (
+              <div>
                 <h1 className="title">Say Hello to {mascota.name}!</h1>
            <div className='selected'>
                <img className="img-selected" src={mascota.picture} alt="" />
@@ -91,7 +99,8 @@ const PetSelected = () => {
         <h3>Give {mascota.name} a 🏠, Log in!</h3>
       </div>)
       }
-           </div>
+        </div>
+           </div>)}
            </Container>
         </div>
      );

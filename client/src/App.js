@@ -8,6 +8,7 @@ import PetSelected from "./components/PetSelected";
 import Dashboard from "./components/Dashboard";
 import Search from "./components/Search";
 import MyOunPets from "./components/MyOunPets";
+import NoAllowed from "./components/NoAllowed";
 import ModalState from "./context/modal/modalState";
 import AlertState from "./context/alert/alertState";
 import AuthState from "./context/auth/authState";
@@ -31,11 +32,14 @@ export default function App() {
           <Router>
             <Routes>
               <Route exact path="/" element={<ListOfPets />} />
-              <Route exact path="/user/:id" element={<MyOunPets />} />
               <Route exact path="/search" element={<Search />} />
-              <Route exact path="/add" element={<AddPetForm />} />
               <Route exact path="/pet/:id" element={<PetSelected />} />
-              <Route exact path="/dashboard" element={<Dashboard />} />
+              <Route exact path="/404" element={<NoAllowed />} />
+              <Route element={<RutaPrivada/>}>
+                <Route exact path="/add" element={<AddPetForm />} />
+                <Route exact path="/user/:id" element={<MyOunPets />} />
+                <Route exact path="/dashboard" element={<Dashboard />} />
+              </Route>
             </Routes>
           </Router>
             </PetsState>

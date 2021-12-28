@@ -4,6 +4,7 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import PetsContext from "../../context/pets/petsContext";
 import AuthContext from "../../context/auth/authContext";
+import Spinner from "../Layout/Spinner/Spinner";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Table from "react-bootstrap/Table";
@@ -55,20 +56,32 @@ export default function ModalUserPets() {
   const { usuario, idUserSelected } = useContext(AuthContext);
   const [spinner, setSpinner] = useState(false);
   const [value, setValue] = useState(0);
+  const [id, setId] = useState('');
+
 
   useEffect(() => {
     getAllPets();
-    if (allpets && usuario && idUserSelected) {
-      getAdoptedPets(idUserSelected);
-      getFosterPets(idUserSelected);
-      getSavedPets(idUserSelected);
-    } else {
+
+    setId(idUserSelected)
+    getAdoptedPets(idUserSelected);
+    getFosterPets(idUserSelected);
+    getSavedPets(idUserSelected);
+
+
+    if(openSeePets){
       setSpinner(true);
       setTimeout(() => {
         setSpinner(false);
-      }, 1000);
+      }, 1500);
     }
-  }, [allpets]);
+    if(idUserSelected !== id){
+      getAdoptedPets(idUserSelected);
+      getFosterPets(idUserSelected);
+      getSavedPets(idUserSelected);
+
+    }
+// eslint-disable-next-line
+  }, [idUserSelected]);
 
   const handleChange = (event, newValue) => {
   setValue(newValue);
@@ -82,7 +95,8 @@ export default function ModalUserPets() {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
+    
+      <Box sx={style}>
         <Box sx={{ width: "100%" }}>
               <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                 <Tabs
@@ -99,7 +113,9 @@ export default function ModalUserPets() {
                 </Tabs>
               </Box>
               <TabPanel value={value} index={0}>
-              {adopt.length ? (<Table striped bordered hover size="sm">
+              {spinner ? (<div><Spinner/></div>)
+              :(<>{adopt.length ? 
+              (<Table striped bordered hover size="sm">
                     <thead>
                       <tr>
                         <th>Name</th>
@@ -118,32 +134,12 @@ export default function ModalUserPets() {
                         </tr>
                       ))}           
                     </tbody>
-                  </Table>) : (<h4>This user has not foster pets</h4>)}
+                  </Table>) 
+                  : (<h4>This user has not foster pets</h4>)}</>)}
               </TabPanel>
               <TabPanel value={value} index={1}>
-              {saved.length ? (<Table striped bordered hover size="sm">
-                    <thead>
-                      <tr>
-                        <th>Name</th>
-                        <th>Type</th>
-                        <th>Status</th>
-                        <th>Breed</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                   {saved.map((pet) => (
-                          <tr>
-                          <td><p>{pet.name}</p></td>
-                          <td><p>{pet.type}</p></td>
-                          <td>{pet.adoptionStatus ? (<p>Adopted ❤️</p>) : (<p>Need a house 🙏</p>)}</td>
-                          <td><p>{pet.breed}</p></td>
-                        </tr>
-                      ))}           
-                    </tbody>
-                  </Table>) : (<h4>This user has not saved pets</h4>)}
-              </TabPanel>
-              <TabPanel value={value} index={2}>
-              {foster.length ? (<Table striped bordered hover size="sm">
+              {spinner ? (<div><Spinner/></div>)
+              : (<>{foster.length ? (<Table striped bordered hover size="sm">
                     <thead>
                       <tr>
                         <th>Name</th>
@@ -162,7 +158,30 @@ export default function ModalUserPets() {
                         </tr>
                       ))}           
                     </tbody>
-                  </Table>) : (<h4>This user has not foster pets</h4>)}
+                  </Table>) : (<h4>This user has not foster pets</h4>)}</>)}
+              </TabPanel>
+              <TabPanel value={value} index={2}>
+              {spinner ? (<div><Spinner/></div>)
+              :(<>{saved.length ? (<Table striped bordered hover size="sm">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Breed</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                   {saved.map((pet) => (
+                          <tr>
+                          <td><p>{pet.name}</p></td>
+                          <td><p>{pet.type}</p></td>
+                          <td>{pet.adoptionStatus ? (<p>Adopted ❤️</p>) : (<p>Need a house 🙏</p>)}</td>
+                          <td><p>{pet.breed}</p></td>
+                        </tr>
+                      ))}           
+                    </tbody>
+                  </Table>) : (<h4>This user has not saved pets</h4>)}</>)}
               </TabPanel>
             </Box>
         </Box>
