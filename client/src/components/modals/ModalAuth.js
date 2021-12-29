@@ -54,7 +54,7 @@ function a11yProps(index) {
 }
 
 export default function ModalAuth(props) {
-  const { open, handleOpen } = useContext(ModalContext);
+  const { open, handleOpen, handleClose } = useContext(ModalContext);
   const { alerta, mostrarAlerta } = useContext(AlertContext);
   const { usuario, mensaje, authenticate, registrarUsuario, iniciarSesion, cerrarSesion, usuarioAutenticado } = useContext(AuthContext);
 
@@ -192,7 +192,7 @@ export default function ModalAuth(props) {
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         open={open}
-        onClose={!open}
+        onClose={handleClose}
         closeAfterTransition
         BackdropComponent={Backdrop}
         BackdropProps={{
