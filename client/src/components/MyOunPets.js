@@ -65,12 +65,10 @@ const MyOunPets = () => {
     getAdoptedPets,
     getFosterPets,
     getSavedPets,
-    getOnePet,
     returnAdoptPet,
   } = useContext(PetsContext);
   const [spinner, setSpinner] = useState(false);
   const [value, setValue] = useState(0);
-  // const navegate = useNavigate()
 
   useEffect(() => {
     setSpinner(true);
@@ -81,6 +79,7 @@ const MyOunPets = () => {
       getSavedPets(usuario._id);
     } 
     setSpinner(false);
+    // eslint-disable-next-line
   }, [allpets]);
 
   const handleChange = (event, newValue) => {
@@ -103,9 +102,6 @@ const MyOunPets = () => {
   };
   const returnApodted = (id) => {
     returnAdoptPet({ usuario: usuario._id, petId: id });
-  };
-  const selectPet = (datos) => {
-    getOnePet(datos);
   };
 
   return (
@@ -153,7 +149,6 @@ const MyOunPets = () => {
                               height="140"
                               image={item.picture}
                               alt="mascota"
-                              onClick={() => selectPet(item)}
                               style={{ cursor: "pointer" }}
                             />
                           </a>
@@ -177,41 +172,34 @@ const MyOunPets = () => {
                               color="text.primary"
                               style={{ textAlign: "center" }}
                             >
-                              <p>Bio: {item.bio}</p>
-                            </Typography>
-                            <Typography
-                              variant="body2"
-                              color="text.primary"
-                              style={{ textAlign: "center" }}
-                            >
-                              <p>Breed: {item.breed}</p>
-                            </Typography>
-                            <Typography
-                              variant="body2"
-                              color="text.primary"
-                              style={{ textAlign: "center" }}
-                            >
                               <p>Status: </p>
                               {item.adoptionStatus ? (
-                                <h3 variant="outlined">Adopted ❤️</h3>
+                                <p variant="outlined">Adopted ❤️</p>
                               ) : (
                                 <>
                                   {item.foster ? (
-                                    <h3 variant="outlined">Pet Fostered</h3>
+                                    <p variant="outlined">Pet Fostered</p>
                                   ) : (
-                                    <h3 variant="outlined">Need a house 🙏</h3>
+                                    <p variant="outlined">Need a house 🙏</p>
                                   )}
                                 </>
                               )}
                             </Typography>
+                            <Typography
+                          variant="body2"
+                          color="text.primary"
+                          style={{ textAlign: "center" }}
+                        >
+                          <a href={`/pet/${item._id}`} className="details_pets"><p>See Detalils</p></a>
+                        </Typography>
                           </CardContent>
                           <CardActions className="card-btn">
                             {usuario ? (
                               <div className="card-action">
                                 {!item.adoptionStatus ? (
                                   <Button
-                                    variant="outlined"
-                                    color="warning"
+                                    variant="contained"
+                                    color="success"
                                     onClick={() => onClickAdopt(item._id)}
                                   >
                                     ADOPT ME
@@ -222,7 +210,7 @@ const MyOunPets = () => {
                                       .toString()
                                       .includes(usuario._id) ? (
                                       <Button
-                                        variant="outlined"
+                                        variant="contained"
                                         color="error"
                                         onClick={() => returnApodted(item._id)}
                                       >
@@ -240,7 +228,7 @@ const MyOunPets = () => {
                                       .toString()
                                       .includes(usuario._id) ? (
                                       <Button
-                                        variant="outlined"
+                                        variant="contained"
                                         color="error"
                                         onClick={() =>
                                           onClickUnfoster(item._id)
@@ -250,7 +238,7 @@ const MyOunPets = () => {
                                       </Button>
                                     ) : (
                                       <Button
-                                        variant="outlined"
+                                        variant="contained"
                                         color="success"
                                         onClick={() => onClickFoster(item._id)}
                                       >
@@ -263,7 +251,7 @@ const MyOunPets = () => {
                                 {item.saved &&
                                 item.saved.toString().includes(usuario._id) ? (
                                   <Button
-                                    variant="outlined"
+                                    variant="contained"
                                     color="error"
                                     onClick={() => onClickUnSave(item._id)}
                                   >
@@ -271,7 +259,7 @@ const MyOunPets = () => {
                                   </Button>
                                 ) : (
                                   <Button
-                                    variant="outlined"
+                                    variant="contained"
                                     color="success"
                                     onClick={() => onClickSave(item._id)}
                                   >
@@ -318,7 +306,6 @@ const MyOunPets = () => {
                               height="140"
                               image={item.picture}
                               alt="mascota"
-                              onClick={() => selectPet(item)}
                               style={{ cursor: "pointer" }}
                             />
                           </a>
@@ -342,41 +329,34 @@ const MyOunPets = () => {
                               color="text.primary"
                               style={{ textAlign: "center" }}
                             >
-                              <p>Bio: {item.bio}</p>
-                            </Typography>
-                            <Typography
-                              variant="body2"
-                              color="text.primary"
-                              style={{ textAlign: "center" }}
-                            >
-                              <p>Breed: {item.breed}</p>
-                            </Typography>
-                            <Typography
-                              variant="body2"
-                              color="text.primary"
-                              style={{ textAlign: "center" }}
-                            >
                               <p>Status: </p>
                               {item.adoptionStatus ? (
-                                <h3 variant="outlined">Adopted ❤️</h3>
+                                <p>Adopted ❤️</p>
                               ) : (
                                 <>
                                   {item.foster ? (
-                                    <h3 variant="outlined">Pet Fostered</h3>
+                                    <p>Pet Fostered</p>
                                   ) : (
-                                    <h3 variant="outlined">Need a house 🙏</h3>
+                                    <p>Need a house 🙏</p>
                                   )}
                                 </>
                               )}
                             </Typography>
+                            <Typography
+                          variant="body2"
+                          color="text.primary"
+                          style={{ textAlign: "center" }}
+                        >
+                          <a href={`/pet/${item._id}`} className="details_pets"><p>See Detalils</p></a>
+                        </Typography>
                           </CardContent>
                           <CardActions className="card-btn">
                             {usuario ? (
                               <div className="card-action">
                                 {!item.adoptionStatus ? (
                                   <Button
-                                    variant="outlined"
-                                    color="warning"
+                                    variant="contained"
+                                    color="success"
                                     onClick={() => onClickAdopt(item._id)}
                                   >
                                     ADOPT ME
@@ -387,7 +367,7 @@ const MyOunPets = () => {
                                       .toString()
                                       .includes(usuario._id) ? (
                                       <Button
-                                        variant="outlined"
+                                        variant="contained"
                                         color="error"
                                         onClick={() => returnApodted(item._id)}
                                       >
@@ -404,7 +384,7 @@ const MyOunPets = () => {
                                       .toString()
                                       .includes(usuario._id) ? (
                                       <Button
-                                        variant="outlined"
+                                        variant="contained"
                                         color="error"
                                         onClick={() =>
                                           onClickUnfoster(item._id)
@@ -414,7 +394,7 @@ const MyOunPets = () => {
                                       </Button>
                                     ) : (
                                       <Button
-                                        variant="outlined"
+                                        variant="contained"
                                         color="success"
                                         onClick={() => onClickFoster(item._id)}
                                       >
@@ -427,7 +407,7 @@ const MyOunPets = () => {
                                 {item.saved &&
                                 item.saved.toString().includes(usuario._id) ? (
                                   <Button
-                                    variant="outlined"
+                                    variant="contained"
                                     color="error"
                                     onClick={() => onClickUnSave(item._id)}
                                   >
@@ -435,7 +415,7 @@ const MyOunPets = () => {
                                   </Button>
                                 ) : (
                                   <Button
-                                    variant="outlined"
+                                    variant="contained"
                                     color="success"
                                     onClick={() => onClickSave(item._id)}
                                   >
@@ -484,7 +464,6 @@ const MyOunPets = () => {
                               height="140"
                               image={item.picture}
                               alt="mascota"
-                              onClick={() => selectPet(item)}
                               style={{ cursor: "pointer" }}
                             />
                           </a>
@@ -508,41 +487,34 @@ const MyOunPets = () => {
                               color="text.primary"
                               style={{ textAlign: "center" }}
                             >
-                              <p>Bio: {item.bio}</p>
-                            </Typography>
-                            <Typography
-                              variant="body2"
-                              color="text.primary"
-                              style={{ textAlign: "center" }}
-                            >
-                              <p>Breed: {item.breed}</p>
-                            </Typography>
-                            <Typography
-                              variant="body2"
-                              color="text.primary"
-                              style={{ textAlign: "center" }}
-                            >
                               <p>Status: </p>
                               {item.adoptionStatus ? (
-                                <h3 variant="outlined">Adopted ❤️</h3>
+                                <p>Adopted ❤️</p>
                               ) : (
                                 <>
                                   {item.foster ? (
-                                    <h3 variant="outlined">Pet Fostered</h3>
+                                    <p>Pet Fostered</p>
                                   ) : (
-                                    <h3 variant="outlined">Need a house 🙏</h3>
+                                    <p>Need a house 🙏</p>
                                   )}
                                 </>
                               )}
                             </Typography>
+                            <Typography
+                          variant="body2"
+                          color="text.primary"
+                          style={{ textAlign: "center" }}
+                        >
+                          <a href={`/pet/${item._id}`} className="details_pets"><p>See Detalils</p></a>
+                        </Typography>
                           </CardContent>
                           <CardActions className="card-btn">
                             {usuario ? (
                               <div className="card-action">
                                 {!item.adoptionStatus ? (
                                   <Button
-                                    variant="outlined"
-                                    color="warning"
+                                    variant="contained"
+                                    color="success"
                                     onClick={() => onClickAdopt(item._id)}
                                   >
                                     ADOPT ME
@@ -553,7 +525,7 @@ const MyOunPets = () => {
                                       .toString()
                                       .includes(usuario._id) ? (
                                       <Button
-                                        variant="outlined"
+                                        variant="contained"
                                         color="error"
                                         onClick={() => returnApodted(item._id)}
                                       >
@@ -570,7 +542,7 @@ const MyOunPets = () => {
                                       .toString()
                                       .includes(usuario._id) ? (
                                       <Button
-                                        variant="outlined"
+                                        variant="contained"
                                         color="error"
                                         onClick={() =>
                                           onClickUnfoster(item._id)
@@ -580,7 +552,7 @@ const MyOunPets = () => {
                                       </Button>
                                     ) : (
                                       <Button
-                                        variant="outlined"
+                                        variant="contained"
                                         color="success"
                                         onClick={() => onClickFoster(item._id)}
                                       >
@@ -593,7 +565,7 @@ const MyOunPets = () => {
                                 {item.saved &&
                                 item.saved.toString().includes(usuario._id) ? (
                                   <Button
-                                    variant="outlined"
+                                    variant="contained"
                                     color="error"
                                     onClick={() => onClickUnSave(item._id)}
                                   >
@@ -601,7 +573,7 @@ const MyOunPets = () => {
                                   </Button>
                                 ) : (
                                   <Button
-                                    variant="outlined"
+                                    variant="contained"
                                     color="success"
                                     onClick={() => onClickSave(item._id)}
                                   >

@@ -41,6 +41,7 @@ const AuthState = props => {
             });
             // Obtener usuario 
             usuarioAutenticado()
+            handleClose()
         } catch (error) {
             console.log(error)
             // esto viene del backend

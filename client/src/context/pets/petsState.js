@@ -1,10 +1,9 @@
-import React, { useReducer, useEffect, useContext, useState } from 'react';
+import React, { useReducer, useState } from 'react';
 import PetsReducer from './petsReducer';
 import PetsContext from './petsContext';
 import clienteAxios from '../../config/axios';
-import AuthContext from '../auth/authContext'
 
-import {GET_ALL_PETS, GET_ONE_PET, ADD_PET, EDIT_PET, DELETE_PET, UPDATE_PET, SEARCH_PET, ADOPT_PET, SAVE_PET, UNSAVE_PET, FOSTER_PET, UNFOSTER_PET, ERROR_PETS, GET_FOSTER_PET, GET_ADOPTED_PET, GET_SAVED_PET} from '../../types'
+import {GET_ALL_PETS, GET_ONE_PET, ADD_PET, DELETE_PET, UPDATE_PET, SEARCH_PET, ADOPT_PET, SAVE_PET, UNSAVE_PET, FOSTER_PET, UNFOSTER_PET, ERROR_PETS, GET_FOSTER_PET, GET_ADOPTED_PET, GET_SAVED_PET} from '../../types'
 
 const PetsState = props => {
     const initialState = {
@@ -27,7 +26,6 @@ const PetsState = props => {
     const handleCloseSeePets = () => setOpenSeePets(false);
 
     const [ state, dispatch ] = useReducer(PetsReducer, initialState)
-    const { usuario } = useContext(AuthContext);
     
     const getAllPets = async () => {
         try {

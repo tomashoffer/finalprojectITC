@@ -6,15 +6,30 @@
 .card_content{
     padding: 5px !important;
     padding-top: 15px !important;
+    padding-bottom: 0px !important;
 }
 .card-btn{
-    padding: 5px !important;
+    padding-bottom: 20px !important;
+    padding-top: 0px !important;
 }
 .card-action{
     display: flex;
     margin: 0 auto;
     margin-top: -50px;
     gap: 5px
+}
+.details_pets{
+    cursor: pointer;
+    font-family: 'Anton', sans-serif;
+}
+.details_pets:hover{
+    color: #0000EE
+}
+.btn_action{
+    cursor: pointer;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1rem;
+    font-weight: bold;
 }
 @media (max-width: 768px) {
     .card-pets{

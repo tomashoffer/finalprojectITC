@@ -11,12 +11,6 @@ import IconButton from "@mui/material/IconButton";
 import { faEllipsisV } from "@fortawesome/free-solid-svg-icons/faEllipsisV";
 
 const FontAwesomeSvgIcon = React.forwardRef((props, ref) => {
-  const { icon } = props;
-
-  const {
-    icon: [width, height, svgPathData],
-  } = icon;
-
   return <MenuIcon style={{ height: "30px", width: "30px" }} />;
 });
 
@@ -34,7 +28,8 @@ export default function SwipeableTemporaryDrawer() {
     if (usuario) {
       setUser(usuario);
     }
-  });
+    // eslint-disable-next-line
+  }, [usuario]);
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (
@@ -57,33 +52,65 @@ export default function SwipeableTemporaryDrawer() {
     >
       <List>
         <ListItem button>
-          <p>Menu</p>
+          <h2 style={{fontFamily: "Anton, sans-serif;", color: "black", fontWeight: "bold"}} >Menu</h2>
         </ListItem>
       </List>
       <Divider />
       <List>
-        <a href="/">
+        <a
+          style={{
+            textDecoration: "none",
+            fontFamily: "Anton, sans-serif;",
+            color: "black",
+            fontWeight: "bold",
+          }}
+          href="/"
+        >
           <ListItem button>
             <p>Home</p>
           </ListItem>
         </a>
 
         {usuario && usuario.role === "user" ? (
-          <a href={`/user/${user._id}`}>
+          <a
+            style={{
+              textDecoration: "none",
+              fontFamily: "Anton, sans-serif;",
+              color: "black",
+              fontWeight: "bold",
+            }}
+            href={`/user/${user._id}`}
+          >
             <ListItem button>
               <p>My Pets Page</p>
             </ListItem>
           </a>
         ) : null}
 
-        <a href="/search">
+        <a
+          style={{
+            textDecoration: "none",
+            fontFamily: "Anton, sans-serif;",
+            color: "black",
+            fontWeight: "bold",
+          }}
+          href="/search"
+        >
           <ListItem button>
             <p>Search</p>
           </ListItem>
         </a>
 
         {usuario && usuario.role === "admin" ? (
-          <a href="/add">
+          <a
+            style={{
+              textDecoration: "none",
+              fontFamily: "Anton, sans-serif;",
+              color: "black",
+              fontWeight: "bold",
+            }}
+            href="/add"
+          >
             <ListItem button>
               <p>Add Pet</p>
             </ListItem>
@@ -91,7 +118,15 @@ export default function SwipeableTemporaryDrawer() {
         ) : null}
 
         {usuario && usuario.role === "admin" ? (
-          <a href="/dashboard">
+          <a
+            style={{
+              textDecoration: "none",
+              fontFamily: "Anton, sans-serif;",
+              color: "black",
+              fontWeight: "bold",
+            }}
+            href="/dashboard"
+          >
             <ListItem button>
               <p>Dashboard</p>
             </ListItem>

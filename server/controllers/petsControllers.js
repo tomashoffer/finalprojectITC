@@ -112,6 +112,7 @@ exports.getPetById = async (req, res) => {
 exports.searchPet = async (req, res) => { 
     const {datos} = req.query;
     const search =  _.omitBy(JSON.parse(datos), (v) => _.isUndefined(v) || _.isNull(v) || v === '');
+    console.log(search)
     const pets = await Pets.find(search)
     if(pets.length === 0) {
         return res.status(401).json({msg: 'No pets founded'});

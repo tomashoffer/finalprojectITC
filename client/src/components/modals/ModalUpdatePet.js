@@ -41,7 +41,7 @@ export default function ModalUpdatePet() {
   });
 
   const [picture, setPicture] = useState(null);
-  const { updatePets, openUpdatePet, handleOpenUpdatePet, handleCloseUpdatePet, idSelected } = useContext(PetsContext)
+  const { updatePets, openUpdatePet, handleCloseUpdatePet, idSelected } = useContext(PetsContext)
   const { usuario } = useContext(AuthContext)
 
   const OnChange = (e) => {

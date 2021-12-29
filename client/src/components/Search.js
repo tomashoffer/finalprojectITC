@@ -1,5 +1,4 @@
 import React, { useState, useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import CssBaseline from "@mui/material/CssBaseline";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
@@ -40,20 +39,25 @@ const Search = () => {
     unsavePet,
     fosterPet,
     unfosterPet,
-    getOnePet,
     returnAdoptPet,
+    getAllPets, 
+    allpets
   } = useContext(PetsContext);
   const { usuario } = useContext(AuthContext);
-  const history = useNavigate();
+
 
   useEffect(() => {
-    setSpinner(true);
+    setSpinner(true)
+    getAllPets();
+    if(search){
+      searchPet(search);
+    }
     if (searchState) {
       setMascotas(searchState);
     }
-     setSpinner(false);
+    setSpinner(false)
     // eslint-disable-next-line
-  }, [setMascotas, searchState]);
+  }, [allpets]);
 
   const OnChange = (e) => {
     setSearch({
@@ -73,42 +77,52 @@ const Search = () => {
     };
     searchPet(newSearch);
     setSubmit(true);
+    console.log(newSearch);
     setSpinner(true);
     setTimeout(() => {
       setSpinner(false);
     }, 1000);
   };
   const handleChange = (event) => {
+    setSearch({
+      name: "",
+      type: "",
+      adoptionStatus: null,
+      height: "",
+      weight: "",
+    })
     setChecked(event.target.checked);
   };
 
   const onClickSave = (id) => {
     savePet({ usuario: usuario._id, petId: id });
+    getAllPets()
   };
   const onClickAdopt = (id) => {
     adoptPet({ usuario: usuario._id, petId: id });
+    getAllPets()
   };
   const onClickUnSave = (id) => {
     unsavePet({ usuario: usuario._id, petId: id });
-    setSpinner(false);
+    getAllPets()
   };
   const onClickFoster = (id) => {
     fosterPet({ usuario: usuario._id, petId: id });
+    getAllPets()
   };
   const onClickUnfoster = (id) => {
     unfosterPet({ usuario: usuario._id, petId: id });
+    getAllPets()
   };
   const returnApodted = (id) => {
     returnAdoptPet({ usuario: usuario._id, petId: id });
+    getAllPets()
   };
-  const selectPet = (datos) => {
-    getOnePet(datos);
-    history(`pet/${datos._id}`);
-  };
+
 
   return (
     <div>
-      <h1>Search</h1>
+      <h1 className="title_search">Search Pets</h1>
       <div>
         <form onSubmit={onSubmit}>
           <CssBaseline />
@@ -255,7 +269,6 @@ const Search = () => {
                           height="140"
                           image={item.picture}
                           alt="mascota"
-                          onClick={() => selectPet(item)}
                           style={{ cursor: "pointer" }}
                         />
                       </a>
@@ -275,32 +288,25 @@ const Search = () => {
                           color="text.primary"
                           style={{ textAlign: "center" }}
                         >
-                          <p>Bio: {item.bio}</p>
-                        </Typography>
-                        <Typography
-                          variant="body2"
-                          color="text.primary"
-                          style={{ textAlign: "center" }}
-                        >
-                          <p>Breed: {item.breed}</p>
-                        </Typography>
-                        <Typography
-                          variant="body2"
-                          color="text.primary"
-                          style={{ textAlign: "center" }}
-                        >
                           <p>Status: </p>
                           {item.adoptionStatus ? (
-                            <h3 variant="outlined">Adopted ❤️</h3>
+                            <p>Adopted ❤️</p>
                           ) : (
                             <>
                               {item.foster ? (
-                                <h3 variant="outlined">Pet Fostered</h3>
+                                <p>Pet Fostered</p>
                               ) : (
-                                <h3 variant="outlined">Need a house 🙏</h3>
+                                <p>Need a house 🙏</p>
                               )}
                             </>
                           )}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          color="text.primary"
+                          style={{ textAlign: "center" }}
+                        >
+                          <a href={`/pet/${item._id}`} className="details_pets"><p>See Detalils</p></a>
                         </Typography>
                       </CardContent>
                       <CardActions className="card-btn">
@@ -308,8 +314,8 @@ const Search = () => {
                           <div className="card-action">
                             {!item.adoptionStatus ? (
                               <Button
-                                variant="outlined"
-                                color="warning"
+                                variant="contained"
+                                color="success"
                                 onClick={() => onClickAdopt(item._id)}
                               >
                                 ADOPT ME
@@ -320,7 +326,7 @@ const Search = () => {
                                   .toString()
                                   .includes(usuario._id) ? (
                                   <Button
-                                    variant="outlined"
+                                    variant="contained"
                                     color="error"
                                     onClick={() => returnApodted(item._id)}
                                   >
@@ -335,7 +341,7 @@ const Search = () => {
                                 {item.foster &&
                                 item.foster.toString().includes(usuario._id) ? (
                                   <Button
-                                    variant="outlined"
+                                    variant="contained"
                                     color="error"
                                     onClick={() => onClickUnfoster(item._id)}
                                   >
@@ -343,7 +349,7 @@ const Search = () => {
                                   </Button>
                                 ) : (
                                   <Button
-                                    variant="outlined"
+                                    variant="contained"
                                     color="success"
                                     onClick={() => onClickFoster(item._id)}
                                   >
@@ -356,7 +362,7 @@ const Search = () => {
                             {item.saved &&
                             item.saved.toString().includes(usuario._id) ? (
                               <Button
-                                variant="outlined"
+                                variant="contained"
                                 color="error"
                                 onClick={() => onClickUnSave(item._id)}
                               >
@@ -364,7 +370,7 @@ const Search = () => {
                               </Button>
                             ) : (
                               <Button
-                                variant="outlined"
+                                variant="contained"
                                 color="success"
                                 onClick={() => onClickSave(item._id)}
                               >

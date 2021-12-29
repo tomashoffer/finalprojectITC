@@ -52,8 +52,8 @@ function a11yProps(index) {
 export default function ModalUserPets() {
 
   const { openSeePets, handleCloseSeePets, getAdoptedPets, getFosterPets, getSavedPets, 
-  saved, adopt, foster, allpets, getAllPets} = useContext(PetsContext)
-  const { usuario, idUserSelected } = useContext(AuthContext);
+  saved, adopt, foster, getAllPets} = useContext(PetsContext)
+  const { idUserSelected } = useContext(AuthContext);
   const [spinner, setSpinner] = useState(false);
   const [value, setValue] = useState(0);
   const [id, setId] = useState('');

@@ -3,7 +3,6 @@
     display: flex;
     justify-content: space-between;
     background-color: #F5B000;
-    padding: 1rem;
     border-radius: 1%;
   }
 
@@ -17,11 +16,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-left: 10rem;
   }
   .header-title{
     color: var(--blanco);
-    margin-left: 10rem;
   }
   .header-title span{ 
    font-weight:bold;
@@ -34,22 +31,27 @@
     justify-content: center;
     align-items: center;
   }
-  .nombre-usuario span {
+  .nombre-usuario  {
     font-weight: 900;
-    font-weight:bold;
   }  
+  .header-modal{
+    margin-top: 1rem;
+  }
 
   @media (max-width: 768px) {
-    .app-header{
-        width: 100%;
-    }
     .header-img{
-        margin-left: 2rem;
-      }
-      .header-div{
-        margin-left: 0rem;
-      }
-      .header-title{
+      margin-right: 2rem;
+      height: 7rem;
+      width: 7rem;
+    }
+    .header-title{
         display: none;
-      }
+    }
+    .header-usuario {
+      margin-top: 1rem;
+    }  
+    .header-modal{
+      margin-top: 0rem;
+      margin-left: 2rem;
+    }
   }

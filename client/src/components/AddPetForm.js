@@ -104,7 +104,7 @@ const AddPetForm = () => {
     <div>
       <CssBaseline />
       <Container fixed>
-        <h1>Add Pet for adoption</h1>
+        <h1 className="add_title">Add Pet for adoption</h1>
         <div className="container-grid">
           <div>
             {preview ? (

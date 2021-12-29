@@ -6,6 +6,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Container from '@mui/material/Container';
 import AuthContext from '../context/auth/authContext'
 import Button from '@mui/material/Button';
+import "bootstrap/dist/css/bootstrap.min.css";
 import './style/PetSelected.css'
 
 const PetSelected = () => {
@@ -20,6 +21,7 @@ const PetSelected = () => {
         getOnePet(id)  
         setMascota(selected)
        setSpinner(false)
+      // eslint-disable-next-line
     }, [selected, id, allpets])
 
     const onClickSave = id => {
@@ -67,7 +69,7 @@ const PetSelected = () => {
               <div>
                 <h1 className="title">Say Hello to {mascota.name}!</h1>
            <div className='selected'>
-               <img className="img-selected" src={mascota.picture} alt="" />
+               <img className="img-selected img-thumbnail hover-shadow" src={mascota.picture} alt="" />
                <div className='selected_data'>
                    
                     <h3>Type: {mascota.type}</h3>

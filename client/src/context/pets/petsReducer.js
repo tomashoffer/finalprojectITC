@@ -1,4 +1,4 @@
-import {GET_ALL_PETS, GET_ONE_PET, ADD_PET, EDIT_PET, SEARCH_PET, UPDATE_PET, ADOPT_PET, SAVE_PET, UNSAVE_PET, DELETE_PET, GET_FOSTER_PET, GET_ADOPTED_PET, GET_SAVED_PET} from '../../types'
+import {GET_ALL_PETS, GET_ONE_PET, ADD_PET, SEARCH_PET, UPDATE_PET, DELETE_PET, GET_FOSTER_PET, GET_ADOPTED_PET, GET_SAVED_PET} from '../../types'
 
 export default (state, action) => {
     switch (action.type) {

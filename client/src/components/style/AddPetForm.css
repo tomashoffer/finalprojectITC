@@ -42,6 +42,9 @@ display: flex
     display: flex;
     justify-content: center;
 }
+.add_title{
+    margin: 20px
+}
 @media (max-width: 768px) {
     .container-grid{
         display: grid;
